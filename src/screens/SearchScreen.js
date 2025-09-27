@@ -6,7 +6,7 @@ import CustomButton from '../components/CustomButton';
 import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function SearchScreen({ navigation }) {
   const { likedProfileIds, toggleLike } = useContext(AuthContext);
@@ -53,7 +53,7 @@ export default function SearchScreen({ navigation }) {
   const renderHeader = () => (
     <Surface style={styles.header} elevation={2}>
       <View style={styles.headerContent}>
-        <MaterialCommunityIcons 
+        <Icon 
           name="magnify" 
           size={32} 
           color="#FF6B6B" 
@@ -81,46 +81,69 @@ export default function SearchScreen({ navigation }) {
 
   const renderFilters = () => (
     <Surface style={styles.filtersContainer} elevation={1}>
-      <Text variant="titleMedium" style={styles.filtersTitle}>Search Filters</Text>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <CustomInput 
-          label="Min Age" 
-          value={filters.minAge} 
-          onChangeText={(v) => set('minAge', v)} 
-          keyboardType="numeric"
-          size="small"
-        />
-        <CustomInput 
-          label="Max Age" 
-          value={filters.maxAge} 
-          onChangeText={(v) => set('maxAge', v)} 
-          keyboardType="numeric"
-          size="small"
-        />
-        <CustomInput 
-          label="Caste" 
-          value={filters.caste} 
-          onChangeText={(v) => set('caste', v)}
-          size="small"
-        />
+      <View style={styles.filtersHeader}>
+        <Icon name="filter" size={20} color="#FF6B6B" />
+        <Text variant="titleMedium" style={styles.filtersTitle}>Search Filters</Text>
+      </View>
+      
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.filtersContent}
+      >
+        <View style={styles.inputRow}>
+          <View style={styles.halfWidth}>
+            <CustomInput 
+              label="Min Age" 
+              value={filters.minAge} 
+              onChangeText={(v) => set('minAge', v)} 
+              keyboardType="numeric"
+              size="small"
+            />
+          </View>
+          <View style={styles.halfWidth}>
+            <CustomInput 
+              label="Max Age" 
+              value={filters.maxAge} 
+              onChangeText={(v) => set('maxAge', v)} 
+              keyboardType="numeric"
+              size="small"
+            />
+          </View>
+        </View>
+        
         <CustomInput 
           label="Religion" 
           value={filters.religion} 
           onChangeText={(v) => set('religion', v)}
           size="small"
         />
+        
         <CustomInput 
-          label="City" 
-          value={filters.city} 
-          onChangeText={(v) => set('city', v)}
+          label="Caste" 
+          value={filters.caste} 
+          onChangeText={(v) => set('caste', v)}
           size="small"
         />
-        <CustomInput 
-          label="State" 
-          value={filters.state} 
-          onChangeText={(v) => set('state', v)}
-          size="small"
-        />
+        
+        <View style={styles.inputRow}>
+          <View style={styles.halfWidth}>
+            <CustomInput 
+              label="City" 
+              value={filters.city} 
+              onChangeText={(v) => set('city', v)}
+              size="small"
+            />
+          </View>
+          <View style={styles.halfWidth}>
+            <CustomInput 
+              label="State" 
+              value={filters.state} 
+              onChangeText={(v) => set('state', v)}
+              size="small"
+            />
+          </View>
+        </View>
+        
         <CustomInput 
           label="Country" 
           value={filters.country} 
@@ -132,6 +155,7 @@ export default function SearchScreen({ navigation }) {
           <CustomButton 
             onPress={() => setApplied(filters)}
             style={styles.applyButton}
+            icon="check"
           >
             Apply Filters
           </CustomButton>
@@ -139,6 +163,7 @@ export default function SearchScreen({ navigation }) {
             mode="outlined" 
             onPress={clearFilters}
             style={styles.clearButton}
+            icon="close"
           >
             Clear
           </CustomButton>
@@ -149,7 +174,7 @@ export default function SearchScreen({ navigation }) {
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <MaterialCommunityIcons 
+      <Icon 
         name="magnify" 
         size={80} 
         color="#ADB5BD" 
@@ -230,19 +255,37 @@ const styles = StyleSheet.create({
     marginTop: 0,
     borderRadius: 16,
     backgroundColor: '#FFFFFF',
-    maxHeight: 400,
+    maxHeight: 500,
+  },
+  filtersHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E9ECEF',
   },
   filtersTitle: {
     fontWeight: '600',
     color: '#2C3E50',
-    padding: 24,
-    paddingBottom: 16,
+    marginLeft: 8,
+    flex: 1,
+  },
+  filtersContent: {
+    padding: 20,
+  },
+  inputRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 16,
+  },
+  halfWidth: {
+    flex: 1,
   },
   filterActions: {
     flexDirection: 'row',
-    gap: 16,
-    padding: 24,
-    paddingTop: 16,
+    gap: 12,
+    marginTop: 8,
   },
   applyButton: {
     flex: 1,

@@ -4,7 +4,7 @@ import { Text, Surface, FAB, Chip } from 'react-native-paper';
 import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { width } = Dimensions.get('window');
 
@@ -39,7 +39,7 @@ export default function HomeScreen({ navigation }) {
       
       <View style={styles.statsContainer}>
         <Surface style={styles.statCard} elevation={2}>
-        <MaterialCommunityIcons 
+        <Icon 
           name="heart" 
           size={24} 
           color="#FF6B6B" 
@@ -53,7 +53,7 @@ export default function HomeScreen({ navigation }) {
         </Surface>
         
         <Surface style={styles.statCard} elevation={2}>
-        <MaterialCommunityIcons 
+        <Icon 
           name="account-group" 
           size={24} 
           color="#4ECDC4" 
@@ -101,7 +101,7 @@ export default function HomeScreen({ navigation }) {
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <MaterialCommunityIcons 
+      <Icon 
         name="heart-outline" 
         size={80} 
         color="#ADB5BD" 

@@ -6,7 +6,7 @@ import SearchScreen from '../screens/SearchScreen';
 import MatchesScreen from '../screens/MatchesScreen';
 import ChatScreen from '../screens/ChatScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,7 +45,7 @@ export default function MainTabs() {
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialCommunityIcons 
+            <Icon 
               name={focused ? "home-heart" : "home-heart-outline"} 
               color={color} 
               size={size} 
@@ -59,8 +59,8 @@ export default function MainTabs() {
         component={SearchScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialCommunityIcons 
-              name={focused ? "magnify" : "magnify"} 
+            <Icon 
+              name="magnify" 
               color={color} 
               size={size} 
             />
@@ -73,7 +73,7 @@ export default function MainTabs() {
         component={MatchesScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialCommunityIcons 
+            <Icon 
               name={focused ? "heart" : "heart-outline"} 
               color={color} 
               size={size} 
@@ -87,7 +87,7 @@ export default function MainTabs() {
         component={ChatScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialCommunityIcons 
+            <Icon 
               name={focused ? "chat" : "chat-outline"} 
               color={color} 
               size={size} 
@@ -101,7 +101,7 @@ export default function MainTabs() {
         component={UserProfileScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialCommunityIcons 
+            <Icon 
               name={focused ? "account" : "account-outline"} 
               color={color} 
               size={size} 

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View, Image, StyleSheet, ScrollView } from 'react-native';
 import { Button, Divider, List, Text, Surface, Chip, FAB } from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function UserProfileScreen({ route, navigation }) {
   const { user, logout, likedProfileIds, toggleLike } = useContext(AuthContext);
@@ -26,7 +26,7 @@ export default function UserProfileScreen({ route, navigation }) {
             />
           ) : (
             <View style={[styles.avatar, styles.avatarFallback]}>
-              <MaterialCommunityIcons 
+              <Icon 
                 name="account" 
                 size={40} 
                 color="#FFFFFF" 
@@ -43,7 +43,7 @@ export default function UserProfileScreen({ route, navigation }) {
             {displayProfile.age} years old
           </Text>
           <View style={styles.locationContainer}>
-            <MaterialCommunityIcons 
+            <Icon 
               name="map-marker" 
               size={16} 
               color="#6C757D" 
@@ -102,7 +102,7 @@ export default function UserProfileScreen({ route, navigation }) {
 
       <View style={styles.detailsList}>
         <View style={styles.detailRow}>
-          <MaterialCommunityIcons 
+          <Icon 
             name="school" 
             size={20} 
             color="#FF6B6B" 
@@ -116,7 +116,7 @@ export default function UserProfileScreen({ route, navigation }) {
         </View>
 
         <View style={styles.detailRow}>
-          <MaterialCommunityIcons 
+          <Icon 
             name="briefcase" 
             size={20} 
             color="#FF6B6B" 
@@ -130,7 +130,7 @@ export default function UserProfileScreen({ route, navigation }) {
         </View>
 
         <View style={styles.detailRow}>
-          <MaterialCommunityIcons 
+          <Icon 
             name="human-male-height" 
             size={20} 
             color="#FF6B6B" 
@@ -144,7 +144,7 @@ export default function UserProfileScreen({ route, navigation }) {
         </View>
 
         <View style={styles.detailRow}>
-          <MaterialCommunityIcons 
+          <Icon 
             name="flag" 
             size={20} 
             color="#FF6B6B" 

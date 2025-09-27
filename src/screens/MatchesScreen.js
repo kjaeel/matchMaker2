@@ -4,7 +4,7 @@ import { Text, Surface, FAB } from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
 import { mockProfiles } from '../data/mockProfiles';
 import ProfileCard from '../components/ProfileCard';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function MatchesScreen({ navigation }) {
   const { likedProfileIds, toggleLike } = useContext(AuthContext);
@@ -17,7 +17,7 @@ export default function MatchesScreen({ navigation }) {
   const renderHeader = () => (
     <Surface style={styles.header} elevation={2}>
       <View style={styles.headerContent}>
-        <MaterialCommunityIcons 
+        <Icon 
           name="heart" 
           size={32} 
           color="#FF6B6B" 
@@ -36,7 +36,7 @@ export default function MatchesScreen({ navigation }) {
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <MaterialCommunityIcons 
+      <Icon 
         name="heart-outline" 
         size={80} 
         color="#ADB5BD" 

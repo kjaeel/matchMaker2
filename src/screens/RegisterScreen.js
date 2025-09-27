@@ -4,7 +4,7 @@ import { HelperText, Text, Surface, SegmentedButtons } from 'react-native-paper'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { AuthContext } from '../context/AuthContext';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { height } = Dimensions.get('window');
 
@@ -60,7 +60,7 @@ export default function RegisterScreen({ navigation }) {
           <Surface style={styles.formContainer} elevation={8}>
             <View style={styles.header}>
               <View style={styles.logoContainer}>
-                <MaterialCommunityIcons 
+                <Icon 
                   name="account-plus" 
                   size={48} 
                   color="#FF6B6B" 
@@ -136,7 +136,7 @@ export default function RegisterScreen({ navigation }) {
               
               {error ? (
                 <View style={styles.errorContainer}>
-                  <MaterialCommunityIcons 
+                  <Icon 
                     name="alert-circle" 
                     size={20} 
                     color="#DC3545" 

@@ -4,7 +4,7 @@ import { Text, Surface } from 'react-native-paper';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { AuthContext } from '../context/AuthContext';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { height } = Dimensions.get('window');
 
@@ -43,7 +43,7 @@ export default function LoginScreen({ navigation }) {
           <Surface style={styles.formContainer} elevation={8}>
             <View style={styles.header}>
               <View style={styles.logoContainer}>
-                <MaterialCommunityIcons 
+                <Icon 
                   name="heart" 
                   size={48} 
                   color="#FF6B6B" 
@@ -75,7 +75,7 @@ export default function LoginScreen({ navigation }) {
               
               {error ? (
                 <View style={styles.errorContainer}>
-                  <MaterialCommunityIcons 
+                  <Icon 
                     name="alert-circle" 
                     size={20} 
                     color="#DC3545" 
