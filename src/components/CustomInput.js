@@ -1,7 +1,6 @@
 import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { theme } from '../styles/theme';
 
 export default function CustomInput({ 
   style, 
@@ -28,25 +27,25 @@ export default function CustomInput({
 
 const styles = StyleSheet.create({
   input: {
-    marginBottom: theme.spacing.md,
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
+    marginBottom: 16,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
   },
   largeInput: {
-    marginBottom: theme.spacing.lg,
-    fontSize: theme.typography.fontSize.lg,
+    marginBottom: 24,
+    fontSize: 18,
   },
   smallInput: {
-    marginBottom: theme.spacing.sm,
-    fontSize: theme.typography.fontSize.sm,
+    marginBottom: 8,
+    fontSize: 14,
   },
   outline: {
-    borderRadius: theme.borderRadius.lg,
+    borderRadius: 12,
     borderWidth: 1.5,
   },
   content: {
-    paddingVertical: theme.spacing.sm,
-    fontSize: theme.typography.fontSize.base,
+    paddingVertical: 8,
+    fontSize: 16,
   },
 });
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, Avatar, Button, Text, Chip } from 'react-native-paper';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
-import { theme } from '../styles/theme';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function ProfileCard({ profile, liked, onLike, onPress }) {
@@ -40,7 +39,7 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
                 <MaterialCommunityIcons 
                   name={liked ? 'heart' : 'heart-outline'} 
                   size={24} 
-                  color={liked ? theme.colors.white : theme.colors.primary}
+                  color={liked ? '#FFFFFF' : '#FF6B6B'}
                 />
               </TouchableOpacity>
             </View>
@@ -61,7 +60,7 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
             <MaterialCommunityIcons 
               name="map-marker" 
               size={16} 
-              color={theme.colors.gray[500]} 
+              color="#6C757D" 
             />
             <Text variant="bodyMedium" style={styles.location}>
               {profile.city}, {profile.state}
@@ -90,7 +89,7 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
               <MaterialCommunityIcons 
                 name="school" 
                 size={16} 
-                color={theme.colors.gray[500]} 
+                color="#6C757D" 
               />
               <Text variant="bodyMedium" style={styles.detailText}>
                 {profile.education}
@@ -100,7 +99,7 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
               <MaterialCommunityIcons 
                 name="briefcase" 
                 size={16} 
-                color={theme.colors.gray[500]} 
+                color="#6C757D" 
               />
               <Text variant="bodyMedium" style={styles.detailText}>
                 {profile.occupation}
@@ -110,7 +109,7 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
               <MaterialCommunityIcons 
                 name="human-male-height" 
                 size={16} 
-                color={theme.colors.gray[500]} 
+                color="#6C757D" 
               />
               <Text variant="bodyMedium" style={styles.detailText}>
                 {profile.heightCm} cm
@@ -125,26 +124,30 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: theme.spacing.sm,
-    marginHorizontal: theme.spacing.md,
-    borderRadius: theme.borderRadius.xl,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 16,
     overflow: 'hidden',
-    ...theme.shadows.lg,
-    backgroundColor: theme.colors.surface,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 8,
+    backgroundColor: '#FFFFFF',
   },
   imageBackground: {
     height: 200,
     width: '100%',
   },
   imageStyle: {
-    borderTopLeftRadius: theme.borderRadius.xl,
-    borderTopRightRadius: theme.borderRadius.xl,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
   },
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'space-between',
-    padding: theme.spacing.md,
+    padding: 16,
   },
   header: {
     flexDirection: 'row',
@@ -152,80 +155,88 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   avatarContainer: {
-    ...theme.shadows.md,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
   avatar: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: '#FF6B6B',
   },
   avatarFallback: {
-    backgroundColor: theme.colors.secondary,
+    backgroundColor: '#4ECDC4',
   },
   avatarLabel: {
-    color: theme.colors.white,
-    fontWeight: theme.typography.fontWeight.bold,
+    color: '#FFFFFF',
+    fontWeight: '700',
   },
   likeButton: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: theme.colors.white,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
-    ...theme.shadows.md,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
   likedButton: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: '#FF6B6B',
   },
   content: {
-    padding: theme.spacing.lg,
+    padding: 24,
   },
   nameContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing.sm,
+    marginBottom: 8,
   },
   name: {
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.text.primary,
+    fontWeight: '700',
+    color: '#2C3E50',
   },
   age: {
-    color: theme.colors.primary,
-    fontWeight: theme.typography.fontWeight.semibold,
+    color: '#FF6B6B',
+    fontWeight: '600',
   },
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: theme.spacing.md,
+    marginBottom: 16,
   },
   location: {
-    marginLeft: theme.spacing.xs,
-    color: theme.colors.gray[600],
+    marginLeft: 4,
+    color: '#6C757D',
   },
   chipsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: theme.spacing.md,
+    marginBottom: 16,
   },
   chip: {
-    marginRight: theme.spacing.sm,
-    marginBottom: theme.spacing.xs,
-    backgroundColor: theme.colors.surfaceVariant,
+    marginRight: 8,
+    marginBottom: 4,
+    backgroundColor: '#F8F9FA',
   },
   chipText: {
-    color: theme.colors.primary,
-    fontWeight: theme.typography.fontWeight.medium,
+    color: '#FF6B6B',
+    fontWeight: '500',
   },
   detailsContainer: {
-    gap: theme.spacing.sm,
+    gap: 8,
   },
   detailRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   detailText: {
-    marginLeft: theme.spacing.sm,
-    color: theme.colors.gray[600],
+    marginLeft: 8,
+    color: '#6C757D',
   },
 });
 

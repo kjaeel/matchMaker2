@@ -7,7 +7,6 @@ import MatchesScreen from '../screens/MatchesScreen';
 import ChatScreen from '../screens/ChatScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { theme } from '../styles/theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,20 +15,24 @@ export default function MainTabs() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: theme.colors.gray[500],
+        tabBarActiveTintColor: '#FF6B6B',
+        tabBarInactiveTintColor: '#6C757D',
         tabBarStyle: {
-          backgroundColor: theme.colors.surface,
-          borderTopColor: theme.colors.gray[200],
+          backgroundColor: '#FFFFFF',
+          borderTopColor: '#DEE2E6',
           borderTopWidth: 1,
           paddingBottom: Platform.OS === 'ios' ? 20 : 8,
           paddingTop: 8,
           height: Platform.OS === 'ios' ? 88 : 64,
-          ...theme.shadows.lg,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 8,
+          elevation: 8,
         },
         tabBarLabelStyle: {
-          fontSize: theme.typography.fontSize.xs,
-          fontWeight: theme.typography.fontWeight.medium,
+          fontSize: 12,
+          fontWeight: '500',
           marginTop: 4,
         },
         tabBarIconStyle: {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { theme } from '../styles/theme';
 
 export default function CustomButton({ 
   style, 
@@ -37,42 +36,46 @@ export default function CustomButton({
 
 const styles = StyleSheet.create({
   button: {
-    marginVertical: theme.spacing.sm,
-    borderRadius: theme.borderRadius.lg,
-    ...theme.shadows.sm,
+    marginVertical: 8,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   fullWidth: {
     width: '100%',
   },
   largeButton: {
-    paddingVertical: theme.spacing.md,
-    borderRadius: theme.borderRadius.xl,
+    paddingVertical: 16,
+    borderRadius: 16,
   },
   smallButton: {
-    paddingVertical: theme.spacing.xs,
-    borderRadius: theme.borderRadius.md,
+    paddingVertical: 4,
+    borderRadius: 8,
   },
   content: {
-    paddingVertical: theme.spacing.sm,
+    paddingVertical: 8,
   },
   label: {
-    fontSize: theme.typography.fontSize.base,
-    fontWeight: theme.typography.fontWeight.semibold,
+    fontSize: 16,
+    fontWeight: '600',
     letterSpacing: 0.5,
   },
   largeLabel: {
-    fontSize: theme.typography.fontSize.lg,
-    fontWeight: theme.typography.fontWeight.bold,
+    fontSize: 18,
+    fontWeight: '700',
   },
   smallLabel: {
-    fontSize: theme.typography.fontSize.sm,
-    fontWeight: theme.typography.fontWeight.medium,
+    fontSize: 14,
+    fontWeight: '500',
   },
   outlinedLabel: {
-    color: theme.colors.primary,
+    color: '#FF6B6B',
   },
   textLabel: {
-    color: theme.colors.primary,
+    color: '#FF6B6B',
   },
 });
 

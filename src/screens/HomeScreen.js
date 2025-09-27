@@ -4,7 +4,6 @@ import { Text, Surface, FAB, Chip } from 'react-native-paper';
 import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
-import { theme } from '../styles/theme';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { width } = Dimensions.get('window');
@@ -40,11 +39,11 @@ export default function HomeScreen({ navigation }) {
       
       <View style={styles.statsContainer}>
         <Surface style={styles.statCard} elevation={2}>
-          <MaterialCommunityIcons 
-            name="heart" 
-            size={24} 
-            color={theme.colors.primary} 
-          />
+        <MaterialCommunityIcons 
+          name="heart" 
+          size={24} 
+          color="#FF6B6B" 
+        />
           <Text variant="titleMedium" style={styles.statNumber}>
             {likedProfileIds.length}
           </Text>
@@ -54,11 +53,11 @@ export default function HomeScreen({ navigation }) {
         </Surface>
         
         <Surface style={styles.statCard} elevation={2}>
-          <MaterialCommunityIcons 
-            name="account-group" 
-            size={24} 
-            color={theme.colors.secondary} 
-          />
+        <MaterialCommunityIcons 
+          name="account-group" 
+          size={24} 
+          color="#4ECDC4" 
+        />
           <Text variant="titleMedium" style={styles.statNumber}>
             {mockProfiles.length}
           </Text>
@@ -105,7 +104,7 @@ export default function HomeScreen({ navigation }) {
       <MaterialCommunityIcons 
         name="heart-outline" 
         size={80} 
-        color={theme.colors.gray[400]} 
+        color="#ADB5BD" 
       />
       <Text variant="headlineSmall" style={styles.emptyTitle}>
         No profiles found
@@ -135,8 +134,8 @@ export default function HomeScreen({ navigation }) {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[theme.colors.primary]}
-            tintColor={theme.colors.primary}
+            colors={['#FF6B6B']}
+            tintColor="#FF6B6B"
           />
         }
         showsVerticalScrollIndicator={false}
@@ -156,100 +155,104 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background,
+    backgroundColor: '#FAFBFC',
   },
   listContent: {
     paddingBottom: 100, // Space for FAB
   },
   header: {
-    padding: theme.spacing.lg,
-    backgroundColor: theme.colors.surface,
-    borderBottomLeftRadius: theme.borderRadius['2xl'],
-    borderBottomRightRadius: theme.borderRadius['2xl'],
-    ...theme.shadows.md,
+    padding: 24,
+    backgroundColor: '#FFFFFF',
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
   headerContent: {
-    marginBottom: theme.spacing.lg,
+    marginBottom: 24,
   },
   title: {
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.text.primary,
-    marginBottom: theme.spacing.xs,
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginBottom: 4,
   },
   subtitle: {
-    color: theme.colors.text.secondary,
+    color: '#6C757D',
   },
   statsContainer: {
     flexDirection: 'row',
-    gap: theme.spacing.md,
-    marginBottom: theme.spacing.lg,
+    gap: 16,
+    marginBottom: 24,
   },
   statCard: {
     flex: 1,
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
+    padding: 16,
+    borderRadius: 12,
     alignItems: 'center',
-    backgroundColor: theme.colors.surface,
+    backgroundColor: '#FFFFFF',
   },
   statNumber: {
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.text.primary,
-    marginTop: theme.spacing.xs,
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginTop: 4,
   },
   statLabel: {
-    color: theme.colors.text.secondary,
-    marginTop: theme.spacing.xs,
+    color: '#6C757D',
+    marginTop: 4,
   },
   filtersContainer: {
-    marginBottom: theme.spacing.sm,
+    marginBottom: 8,
   },
   filtersTitle: {
-    fontWeight: theme.typography.fontWeight.semibold,
-    color: theme.colors.text.primary,
-    marginBottom: theme.spacing.sm,
+    fontWeight: '600',
+    color: '#2C3E50',
+    marginBottom: 8,
   },
   chipsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: theme.spacing.sm,
+    gap: 8,
   },
   filterChip: {
-    backgroundColor: theme.colors.surfaceVariant,
+    backgroundColor: '#F8F9FA',
   },
   selectedChip: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: '#FF6B6B',
   },
   chipText: {
-    color: theme.colors.text.secondary,
+    color: '#6C757D',
   },
   selectedChipText: {
-    color: theme.colors.white,
+    color: '#FFFFFF',
   },
   emptyState: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: theme.spacing['2xl'],
-    marginTop: theme.spacing['3xl'],
+    padding: 48,
+    marginTop: 64,
   },
   emptyTitle: {
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.text.primary,
-    marginTop: theme.spacing.lg,
-    marginBottom: theme.spacing.sm,
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginTop: 24,
+    marginBottom: 8,
     textAlign: 'center',
   },
   emptySubtitle: {
-    color: theme.colors.text.secondary,
+    color: '#6C757D',
     textAlign: 'center',
-    lineHeight: theme.typography.lineHeight.relaxed * theme.typography.fontSize.lg,
+    lineHeight: 1.6 * 18,
   },
   fab: {
     position: 'absolute',
-    margin: theme.spacing.lg,
+    margin: 24,
     right: 0,
     bottom: 0,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: '#FF6B6B',
   },
 });
 
