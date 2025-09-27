@@ -4,7 +4,6 @@ import { HelperText, Text, Surface, SegmentedButtons } from 'react-native-paper'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { AuthContext } from '../context/AuthContext';
-import { theme } from '../styles/theme';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { height } = Dimensions.get('window');
@@ -64,7 +63,7 @@ export default function RegisterScreen({ navigation }) {
                 <MaterialCommunityIcons 
                   name="account-plus" 
                   size={48} 
-                  color={theme.colors.primary} 
+                  color="#FF6B6B" 
                 />
               </View>
               <Text variant="headlineMedium" style={styles.title}>
@@ -140,7 +139,7 @@ export default function RegisterScreen({ navigation }) {
                   <MaterialCommunityIcons 
                     name="alert-circle" 
                     size={20} 
-                    color={theme.colors.error} 
+                    color="#DC3545" 
                   />
                   <Text style={styles.errorText}>{error}</Text>
                 </View>
@@ -194,88 +193,96 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    padding: theme.spacing.lg,
-    paddingTop: theme.spacing['2xl'],
+    padding: 24,
+    paddingTop: 48,
   },
   formContainer: {
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius['2xl'],
-    padding: theme.spacing['2xl'],
-    ...theme.shadows.xl,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    padding: 48,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 16,
+    elevation: 16,
   },
   header: {
     alignItems: 'center',
-    marginBottom: theme.spacing['2xl'],
+    marginBottom: 48,
   },
   logoContainer: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: theme.colors.primaryContainer,
+    backgroundColor: '#FF8E8E',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: theme.spacing.lg,
-    ...theme.shadows.md,
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
   title: {
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.text.primary,
-    marginBottom: theme.spacing.sm,
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginBottom: 8,
     textAlign: 'center',
   },
   subtitle: {
-    color: theme.colors.text.secondary,
+    color: '#6C757D',
     textAlign: 'center',
-    lineHeight: theme.typography.lineHeight.relaxed * theme.typography.fontSize.lg,
+    lineHeight: 1.6 * 18,
   },
   form: {
-    gap: theme.spacing.md,
+    gap: 16,
   },
   genderContainer: {
-    marginBottom: theme.spacing.md,
+    marginBottom: 16,
   },
   genderLabel: {
-    marginBottom: theme.spacing.sm,
-    color: theme.colors.text.primary,
-    fontWeight: theme.typography.fontWeight.medium,
+    marginBottom: 8,
+    color: '#2C3E50',
+    fontWeight: '500',
   },
   segmentedButtons: {
-    backgroundColor: theme.colors.surfaceVariant,
+    backgroundColor: '#F8F9FA',
   },
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.errorContainer || '#FFEBEE',
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
-    marginVertical: theme.spacing.sm,
+    backgroundColor: '#FFEBEE',
+    padding: 16,
+    borderRadius: 12,
+    marginVertical: 8,
   },
   errorText: {
-    color: theme.colors.error,
-    marginLeft: theme.spacing.sm,
+    color: '#DC3545',
+    marginLeft: 8,
     flex: 1,
-    fontWeight: theme.typography.fontWeight.medium,
+    fontWeight: '500',
   },
   registerButton: {
-    marginTop: theme.spacing.lg,
+    marginTop: 24,
   },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: theme.spacing.lg,
+    marginVertical: 24,
   },
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: theme.colors.gray[300],
+    backgroundColor: '#CED4DA',
   },
   dividerText: {
-    marginHorizontal: theme.spacing.md,
-    color: theme.colors.text.secondary,
-    fontWeight: theme.typography.fontWeight.medium,
+    marginHorizontal: 16,
+    color: '#6C757D',
+    fontWeight: '500',
   },
   loginButton: {
-    borderColor: theme.colors.primary,
+    borderColor: '#FF6B6B',
     borderWidth: 2,
   },
 });

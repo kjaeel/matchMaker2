@@ -6,7 +6,6 @@ import CustomButton from '../components/CustomButton';
 import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
-import { theme } from '../styles/theme';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function SearchScreen({ navigation }) {
@@ -57,7 +56,7 @@ export default function SearchScreen({ navigation }) {
         <MaterialCommunityIcons 
           name="magnify" 
           size={32} 
-          color={theme.colors.primary} 
+          color="#FF6B6B" 
         />
         <View style={styles.headerText}>
           <Text variant="headlineMedium" style={styles.title}>
@@ -153,7 +152,7 @@ export default function SearchScreen({ navigation }) {
       <MaterialCommunityIcons 
         name="magnify" 
         size={80} 
-        color={theme.colors.gray[400]} 
+        color="#ADB5BD" 
       />
       <Text variant="headlineSmall" style={styles.emptyTitle}>
         No results found
@@ -194,56 +193,56 @@ export default function SearchScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background,
+    backgroundColor: '#FAFBFC',
   },
   listContent: {
     paddingBottom: 100,
   },
   header: {
-    margin: theme.spacing.lg,
-    marginBottom: theme.spacing.md,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
+    margin: 24,
+    marginBottom: 16,
+    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
   },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: theme.spacing.lg,
+    padding: 24,
   },
   headerText: {
-    marginLeft: theme.spacing.md,
+    marginLeft: 16,
     flex: 1,
   },
   title: {
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.text.primary,
-    marginBottom: theme.spacing.xs,
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginBottom: 4,
   },
   subtitle: {
-    color: theme.colors.text.secondary,
+    color: '#6C757D',
   },
   filterToggle: {
-    margin: theme.spacing.lg,
+    margin: 24,
     marginTop: 0,
   },
   filtersContainer: {
-    margin: theme.spacing.lg,
+    margin: 24,
     marginTop: 0,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
+    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
     maxHeight: 400,
   },
   filtersTitle: {
-    fontWeight: theme.typography.fontWeight.semibold,
-    color: theme.colors.text.primary,
-    padding: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
+    fontWeight: '600',
+    color: '#2C3E50',
+    padding: 24,
+    paddingBottom: 16,
   },
   filterActions: {
     flexDirection: 'row',
-    gap: theme.spacing.md,
-    padding: theme.spacing.lg,
-    paddingTop: theme.spacing.md,
+    gap: 16,
+    padding: 24,
+    paddingTop: 16,
   },
   applyButton: {
     flex: 1,
@@ -255,20 +254,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: theme.spacing['2xl'],
-    marginTop: theme.spacing['3xl'],
+    padding: 48,
+    marginTop: 64,
   },
   emptyTitle: {
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.text.primary,
-    marginTop: theme.spacing.lg,
-    marginBottom: theme.spacing.sm,
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginTop: 24,
+    marginBottom: 8,
     textAlign: 'center',
   },
   emptySubtitle: {
-    color: theme.colors.text.secondary,
+    color: '#6C757D',
     textAlign: 'center',
-    lineHeight: theme.typography.lineHeight.relaxed * theme.typography.fontSize.lg,
+    lineHeight: 1.6 * 18,
   },
 });
 
