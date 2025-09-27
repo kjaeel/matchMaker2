@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Avatar, Button, Text, Chip } from 'react-native-paper';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 export default function ProfileCard({ profile, liked, onLike, onPress }) {
   const initials = profile?.name?.split(' ').map(s => s[0]).join('').slice(0, 2).toUpperCase();
@@ -36,11 +36,11 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
                 style={[styles.likeButton, liked && styles.likedButton]}
                 onPress={onLike}
               >
-                <Icon 
-                  name={liked ? 'heart' : 'heart-outline'} 
-                  size={24} 
-                  color={liked ? '#FFFFFF' : '#FF6B6B'}
-                />
+                       <MaterialIcons
+                         name={liked ? 'favorite' : 'favorite-border'}
+                         size={24}
+                         color={liked ? '#FFFFFF' : '#FF6B6B'}
+                       />
               </TouchableOpacity>
             </View>
           </View>
@@ -57,11 +57,11 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
           </View>
           
           <View style={styles.locationContainer}>
-            <Icon 
-              name="map-marker" 
-              size={16} 
-              color="#6C757D" 
-            />
+                   <MaterialIcons
+                     name="location-on"
+                     size={16}
+                     color="#6C757D"
+                   />
             <Text variant="bodyMedium" style={styles.location}>
               {profile.city}, {profile.state}
             </Text>
@@ -86,31 +86,31 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
           
           <View style={styles.detailsContainer}>
             <View style={styles.detailRow}>
-              <Icon 
-                name="school" 
-                size={16} 
-                color="#6C757D" 
-              />
+                     <MaterialIcons
+                       name="school"
+                       size={16}
+                       color="#6C757D"
+                     />
               <Text variant="bodyMedium" style={styles.detailText}>
                 {profile.education}
               </Text>
             </View>
             <View style={styles.detailRow}>
-              <Icon 
-                name="briefcase" 
-                size={16} 
-                color="#6C757D" 
-              />
+                     <MaterialIcons
+                       name="work"
+                       size={16}
+                       color="#6C757D"
+                     />
               <Text variant="bodyMedium" style={styles.detailText}>
                 {profile.occupation}
               </Text>
             </View>
             <View style={styles.detailRow}>
-              <Icon 
-                name="human-male-height" 
-                size={16} 
-                color="#6C757D" 
-              />
+                     <MaterialIcons
+                       name="height"
+                       size={16}
+                       color="#6C757D"
+                     />
               <Text variant="bodyMedium" style={styles.detailText}>
                 {profile.heightCm} cm
               </Text>

@@ -6,7 +6,7 @@ import SearchScreen from '../screens/SearchScreen';
 import MatchesScreen from '../screens/MatchesScreen';
 import ChatScreen from '../screens/ChatScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,8 +45,8 @@ export default function MainTabs() {
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <Icon 
-              name={focused ? "home-heart" : "home-heart-outline"} 
+            <MaterialIcons 
+              name="home" 
               color={color} 
               size={size} 
             />
@@ -59,8 +59,8 @@ export default function MainTabs() {
         component={SearchScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <Icon 
-              name="magnify" 
+            <MaterialIcons 
+              name="search" 
               color={color} 
               size={size} 
             />
@@ -73,8 +73,8 @@ export default function MainTabs() {
         component={MatchesScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <Icon 
-              name={focused ? "heart" : "heart-outline"} 
+            <MaterialIcons 
+              name="favorite" 
               color={color} 
               size={size} 
             />
@@ -87,8 +87,8 @@ export default function MainTabs() {
         component={ChatScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <Icon 
-              name={focused ? "chat" : "chat-outline"} 
+            <MaterialIcons 
+              name="chat" 
               color={color} 
               size={size} 
             />
@@ -101,8 +101,8 @@ export default function MainTabs() {
         component={UserProfileScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <Icon 
-              name={focused ? "account" : "account-outline"} 
+            <MaterialIcons 
+              name="person" 
               color={color} 
               size={size} 
             />

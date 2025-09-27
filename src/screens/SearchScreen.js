@@ -6,7 +6,7 @@ import CustomButton from '../components/CustomButton';
 import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 export default function SearchScreen({ navigation }) {
   const { likedProfileIds, toggleLike } = useContext(AuthContext);
@@ -53,11 +53,11 @@ export default function SearchScreen({ navigation }) {
   const renderHeader = () => (
     <Surface style={styles.header} elevation={2}>
       <View style={styles.headerContent}>
-        <Icon 
-          name="magnify" 
-          size={32} 
-          color="#FF6B6B" 
-        />
+               <MaterialIcons
+                 name="search"
+                 size={32}
+                 color="#FF6B6B"
+               />
         <View style={styles.headerText}>
           <Text variant="headlineMedium" style={styles.title}>
             Search & Filter
@@ -81,10 +81,10 @@ export default function SearchScreen({ navigation }) {
 
   const renderFilters = () => (
     <Surface style={styles.filtersContainer} elevation={1}>
-      <View style={styles.filtersHeader}>
-        <Icon name="filter" size={20} color="#FF6B6B" />
-        <Text variant="titleMedium" style={styles.filtersTitle}>Search Filters</Text>
-      </View>
+             <View style={styles.filtersHeader}>
+               <MaterialIcons name="filter-list" size={20} color="#FF6B6B" />
+               <Text variant="titleMedium" style={styles.filtersTitle}>Search Filters</Text>
+             </View>
       
       <ScrollView 
         showsVerticalScrollIndicator={false}
@@ -174,11 +174,11 @@ export default function SearchScreen({ navigation }) {
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <Icon 
-        name="magnify" 
-        size={80} 
-        color="#ADB5BD" 
-      />
+             <MaterialIcons
+               name="search"
+               size={80}
+               color="#ADB5BD"
+             />
       <Text variant="headlineSmall" style={styles.emptyTitle}>
         No results found
       </Text>
@@ -246,17 +246,19 @@ const styles = StyleSheet.create({
   subtitle: {
     color: '#6C757D',
   },
-  filterToggle: {
-    margin: 24,
-    marginTop: 0,
-  },
-  filtersContainer: {
-    margin: 24,
-    marginTop: 0,
-    borderRadius: 16,
-    backgroundColor: '#FFFFFF',
-    maxHeight: 500,
-  },
+         filterToggle: {
+           marginHorizontal: 24,
+           marginTop: 0,
+           marginBottom: 16,
+         },
+         filtersContainer: {
+           marginHorizontal: 24,
+           marginTop: 0,
+           marginBottom: 16,
+           borderRadius: 16,
+           backgroundColor: '#FFFFFF',
+           maxHeight: 500,
+         },
   filtersHeader: {
     flexDirection: 'row',
     alignItems: 'center',
