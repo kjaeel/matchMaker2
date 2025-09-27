@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Avatar, Button, Text, Chip } from 'react-native-paper';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function ProfileCard({ profile, liked, onLike, onPress }) {
   const initials = profile?.name?.split(' ').map(s => s[0]).join('').slice(0, 2).toUpperCase();
