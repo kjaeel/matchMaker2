@@ -4,7 +4,7 @@ import { Text, Surface, FAB, Chip } from 'react-native-paper';
 import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
