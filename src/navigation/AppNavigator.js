@@ -4,6 +4,7 @@ import AuthStack from './AuthStack';
 import MainTabs from './MainTabs';
 import { AuthContext } from '../context/AuthContext';
 import ProfileSetupScreen from '../screens/ProfileSetupScreen';
+import UserProfileScreen from '../screens/UserProfileScreen';
 import { ActivityIndicator } from 'react-native-paper';
 import { View } from 'react-native';
 
@@ -36,6 +37,28 @@ export default function AppNavigator() {
     );
   }
 
-  return <MainTabs />;
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="MainTabs" 
+        component={MainTabs} 
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="UserProfile"
+        component={UserProfileScreen}
+        options={{ 
+          title: 'Profile Details',
+          headerStyle: {
+            backgroundColor: '#FF6B6B',
+          },
+          headerTintColor: '#FFFFFF',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
 }
 
