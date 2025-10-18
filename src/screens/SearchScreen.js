@@ -280,17 +280,42 @@ export default function SearchScreen({ navigation }) {
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-             <MaterialIcons
-               name="search"
-               size={80}
-               color="#ADB5BD"
-             />
-      <Text variant="headlineSmall" style={styles.emptyTitle}>
-        No results found
-      </Text>
-      <Text variant="bodyLarge" style={styles.emptySubtitle}>
-        Try adjusting your search filters
-      </Text>
+      {loading ? (
+        <>
+          <ActivityIndicator size="large" color="#FF6B6B" />
+          <Text variant="bodyLarge" style={styles.emptySubtitle}>
+            Searching...
+          </Text>
+        </>
+      ) : error ? (
+        <>
+          <MaterialIcons
+            name="error-outline"
+            size={80}
+            color="#DC3545"
+          />
+          <Text variant="headlineSmall" style={styles.emptyTitle}>
+            Search Error
+          </Text>
+          <Text variant="bodyLarge" style={styles.emptySubtitle}>
+            {error}
+          </Text>
+        </>
+      ) : (
+        <>
+          <MaterialIcons
+            name="search"
+            size={80}
+            color="#ADB5BD"
+          />
+          <Text variant="headlineSmall" style={styles.emptyTitle}>
+            No results found
+          </Text>
+          <Text variant="bodyLarge" style={styles.emptySubtitle}>
+            Try adjusting your search filters
+          </Text>
+        </>
+      )}
     </View>
   );
 
