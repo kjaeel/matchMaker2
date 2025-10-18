@@ -247,7 +247,8 @@ const styles = StyleSheet.create({
     color: '#6C757D',
   },
          filterToggle: {
-           marginHorizontal: 24,
+          //  marginHorizontal: 24,
+          
            marginTop: 0,
            marginBottom: 16,
          },

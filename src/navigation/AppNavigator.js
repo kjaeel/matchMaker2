@@ -21,21 +21,21 @@ export default function AppNavigator() {
     );
   }
 
-  if (!user) {
-    return <AuthStack />;
-  }
+  // if (!user) {
+  //   return <AuthStack />;
+  // }
 
-  if (!user.isProfileComplete) {
-    return (
-      <Stack.Navigator>
-        <Stack.Screen
-          name="ProfileSetup"
-          component={ProfileSetupScreen}
-          options={{ title: 'Complete Your Profile' }}
-        />
-      </Stack.Navigator>
-    );
-  }
+  // if (!user.isProfileComplete) {
+  //   return (
+  //     <Stack.Navigator>
+  //       <Stack.Screen
+  //         name="ProfileSetup"
+  //         component={ProfileSetupScreen}
+  //         options={{ title: 'Complete Your Profile' }}
+  //       />
+  //     </Stack.Navigator>
+  //   );
+  // }
 
   return (
     <Stack.Navigator>

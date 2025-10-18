@@ -293,6 +293,7 @@ const styles = StyleSheet.create({
     color: '#6C757D',
     fontWeight: '500',
     marginBottom: 2,
+    alignItems: 'center'
   },
   detailValue: {
     color: '#2C3E50',
