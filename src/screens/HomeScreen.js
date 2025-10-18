@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, RefreshControl, Dimensions } from 'react-native';
-import { Text, Surface, FAB, Chip } from 'react-native-paper';
+import { Text, Surface, FAB, Chip, ActivityIndicator } from 'react-native-paper';
 import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
+import { userAPI } from '../services/api';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 const { width } = Dimensions.get('window');
@@ -12,14 +13,73 @@ export default function HomeScreen({ navigation }) {
   const { likedProfileIds, toggleLike } = useContext(AuthContext);
   const [refreshing, setRefreshing] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch profiles from API
+  const fetchProfiles = async () => {
+    try {
+      setError(null);
+      const result = await userAPI.getAllUsers();
+      
+      if (result.success) {
+        // Transform API data to match our expected format
+        const transformedProfiles = result.data.map(user => ({
+          id: user.id,
+          name: user.fullName,
+          age: user.age || calculateAge(user.dateOfBirth),
+          gender: user.gender,
+          religion: user.religion || 'Not specified',
+          caste: user.caste || 'Not specified',
+          city: user.city || 'Not specified',
+          state: user.state || 'Not specified',
+          country: user.country || 'Not specified',
+          education: user.education || 'Not specified',
+          occupation: user.occupation || 'Not specified',
+          heightCm: user.heightCm || 0,
+          photo: user.photoUri || 'https://randomuser.me/api/portraits/men/1.jpg',
+        }));
+        setProfiles(transformedProfiles);
+      } else {
+        setError(result.error);
+        // Fallback to mock data if API fails
+        setProfiles(mockProfiles);
+      }
+    } catch (err) {
+      setError(err.message);
+      // Fallback to mock data if API fails
+      setProfiles(mockProfiles);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Calculate age from date of birth
+  const calculateAge = (dateOfBirth) => {
+    if (!dateOfBirth) return 25; // Default age
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
+  // Load profiles on component mount
+  useEffect(() => {
+    fetchProfiles();
+  }, []);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    // Simulate API call
-    setTimeout(() => setRefreshing(false), 1000);
+    await fetchProfiles();
+    setRefreshing(false);
   };
 
-  const filteredProfiles = mockProfiles.filter(profile => {
+  const filteredProfiles = profiles.filter(profile => {
     if (filter === 'all') return true;
     if (filter === 'liked') return likedProfileIds.includes(profile.id);
     if (filter === 'nearby') return profile.city === 'Bengaluru'; // Example filter
@@ -59,7 +119,7 @@ export default function HomeScreen({ navigation }) {
                  color="#4ECDC4"
                />
           <Text variant="titleMedium" style={styles.statNumber}>
-            {mockProfiles.length}
+            {profiles.length}
           </Text>
           <Text variant="bodySmall" style={styles.statLabel}>
             Profiles
@@ -101,17 +161,42 @@ export default function HomeScreen({ navigation }) {
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-             <MaterialIcons
-               name="favorite-border"
-               size={80}
-               color="#ADB5BD"
-             />
-      <Text variant="headlineSmall" style={styles.emptyTitle}>
-        No profiles found
-      </Text>
-      <Text variant="bodyLarge" style={styles.emptySubtitle}>
-        Try adjusting your filters or check back later for new profiles
-      </Text>
+      {loading ? (
+        <>
+          <ActivityIndicator size="large" color="#FF6B6B" />
+          <Text variant="bodyLarge" style={styles.emptySubtitle}>
+            Loading profiles...
+          </Text>
+        </>
+      ) : error ? (
+        <>
+          <MaterialIcons
+            name="error-outline"
+            size={80}
+            color="#DC3545"
+          />
+          <Text variant="headlineSmall" style={styles.emptyTitle}>
+            Error loading profiles
+          </Text>
+          <Text variant="bodyLarge" style={styles.emptySubtitle}>
+            {error}
+          </Text>
+        </>
+      ) : (
+        <>
+          <MaterialIcons
+            name="favorite-border"
+            size={80}
+            color="#ADB5BD"
+          />
+          <Text variant="headlineSmall" style={styles.emptyTitle}>
+            No profiles found
+          </Text>
+          <Text variant="bodyLarge" style={styles.emptySubtitle}>
+            Try adjusting your filters or check back later for new profiles
+          </Text>
+        </>
+      )}
     </View>
   );
 

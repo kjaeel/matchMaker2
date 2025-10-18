@@ -4,6 +4,7 @@ import { HelperText, Text, Surface, SegmentedButtons } from 'react-native-paper'
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { AuthContext } from '../context/AuthContext';
+import { userAPI } from '../services/api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { height } = Dimensions.get('window');
@@ -36,7 +37,39 @@ export default function RegisterScreen({ navigation }) {
     }
     try {
       setSubmitting(true);
-      await register(form);
+      
+      // Prepare user data for API
+      const userData = {
+        fullName: form.fullName,
+        email: form.email || null,
+        phone: form.phone || null,
+        gender: form.gender || null,
+        dateOfBirth: form.dob || null,
+        password: form.password,
+      };
+
+      // Call the API to create user
+      const result = await userAPI.createUser(userData);
+      
+      if (result.success) {
+        // Update local context with the created user
+        const createdUser = {
+          id: result.data.id || String(Date.now()),
+          fullName: result.data.fullName || form.fullName,
+          email: result.data.email || form.email,
+          phone: result.data.phone || form.phone,
+          gender: result.data.gender || form.gender,
+          dob: result.data.dateOfBirth || form.dob,
+          photoUri: result.data.photoUri || undefined,
+          profile: result.data.profile || null,
+          isProfileComplete: result.data.isProfileComplete || false,
+        };
+        
+        // Update the context with the created user
+        await register(createdUser);
+      } else {
+        setError(result.error || 'Registration failed');
+      }
     } catch (e) {
       setError(e?.message || 'Registration failed');
     } finally {

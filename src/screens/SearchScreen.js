@@ -1,11 +1,12 @@
 import React, { useContext, useMemo, useState } from 'react';
 import { View, FlatList, StyleSheet, ScrollView } from 'react-native';
-import { Text, Surface, Chip, FAB } from 'react-native-paper';
+import { Text, Surface, Chip, FAB, ActivityIndicator } from 'react-native-paper';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
+import { userAPI } from '../services/api';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 export default function SearchScreen({ navigation }) {
@@ -21,21 +22,120 @@ export default function SearchScreen({ navigation }) {
   });
   const [applied, setApplied] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const set = (k, v) => setFilters((p) => ({ ...p, [k]: v }));
 
-  const results = useMemo(() => {
-    const f = applied || {};
-    return mockProfiles.filter(p => {
-      if (f.minAge && p.age < Number(f.minAge)) return false;
-      if (f.maxAge && p.age > Number(f.maxAge)) return false;
-      if (f.caste && !p.caste.toLowerCase().includes(f.caste.toLowerCase())) return false;
-      if (f.religion && !p.religion.toLowerCase().includes(f.religion.toLowerCase())) return false;
-      if (f.city && !p.city.toLowerCase().includes(f.city.toLowerCase())) return false;
-      if (f.state && !p.state.toLowerCase().includes(f.state.toLowerCase())) return false;
-      if (f.country && !p.country.toLowerCase().includes(f.country.toLowerCase())) return false;
-      return true;
-    });
-  }, [applied]);
+  // Search function that uses APIs
+  const performSearch = async (searchFilters) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      let searchResults = [];
+      
+      // If age range is specified, use the age search API
+      if (searchFilters.minAge && searchFilters.maxAge) {
+        const ageResult = await userAPI.searchByAgeRange(
+          parseInt(searchFilters.minAge), 
+          parseInt(searchFilters.maxAge)
+        );
+        
+        if (ageResult.success) {
+          searchResults = ageResult.data;
+        } else {
+          throw new Error(ageResult.error);
+        }
+      }
+      
+      // If city is specified, use the city search API
+      if (searchFilters.city) {
+        const cityResult = await userAPI.searchByCity(searchFilters.city);
+        
+        if (cityResult.success) {
+          // If we already have age results, filter by city
+          if (searchResults.length > 0) {
+            searchResults = searchResults.filter(user => 
+              user.city && user.city.toLowerCase().includes(searchFilters.city.toLowerCase())
+            );
+          } else {
+            searchResults = cityResult.data;
+          }
+        } else {
+          throw new Error(cityResult.error);
+        }
+      }
+      
+      // If no specific API filters, get all users and filter locally
+      if (!searchFilters.minAge && !searchFilters.maxAge && !searchFilters.city) {
+        const allUsersResult = await userAPI.getAllUsers();
+        if (allUsersResult.success) {
+          searchResults = allUsersResult.data;
+        } else {
+          throw new Error(allUsersResult.error);
+        }
+      }
+      
+      // Transform API data to match our expected format
+      const transformedResults = searchResults.map(user => ({
+        id: user.id,
+        name: user.fullName,
+        age: user.age || calculateAge(user.dateOfBirth),
+        gender: user.gender,
+        religion: user.religion || 'Not specified',
+        caste: user.caste || 'Not specified',
+        city: user.city || 'Not specified',
+        state: user.state || 'Not specified',
+        country: user.country || 'Not specified',
+        education: user.education || 'Not specified',
+        occupation: user.occupation || 'Not specified',
+        heightCm: user.heightCm || 0,
+        photo: user.photoUri || 'https://randomuser.me/api/portraits/men/1.jpg',
+      }));
+      
+      // Apply additional local filters
+      const filteredResults = transformedResults.filter(p => {
+        if (searchFilters.caste && !p.caste.toLowerCase().includes(searchFilters.caste.toLowerCase())) return false;
+        if (searchFilters.religion && !p.religion.toLowerCase().includes(searchFilters.religion.toLowerCase())) return false;
+        if (searchFilters.state && !p.state.toLowerCase().includes(searchFilters.state.toLowerCase())) return false;
+        if (searchFilters.country && !p.country.toLowerCase().includes(searchFilters.country.toLowerCase())) return false;
+        return true;
+      });
+      
+      setResults(filteredResults);
+    } catch (err) {
+      setError(err.message);
+      // Fallback to mock data filtering
+      const f = searchFilters;
+      const fallbackResults = mockProfiles.filter(p => {
+        if (f.minAge && p.age < Number(f.minAge)) return false;
+        if (f.maxAge && p.age > Number(f.maxAge)) return false;
+        if (f.caste && !p.caste.toLowerCase().includes(f.caste.toLowerCase())) return false;
+        if (f.religion && !p.religion.toLowerCase().includes(f.religion.toLowerCase())) return false;
+        if (f.city && !p.city.toLowerCase().includes(f.city.toLowerCase())) return false;
+        if (f.state && !p.state.toLowerCase().includes(f.state.toLowerCase())) return false;
+        if (f.country && !p.country.toLowerCase().includes(f.country.toLowerCase())) return false;
+        return true;
+      });
+      setResults(fallbackResults);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Calculate age from date of birth
+  const calculateAge = (dateOfBirth) => {
+    if (!dateOfBirth) return 25; // Default age
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
 
   const clearFilters = () => {
     setFilters({
@@ -48,6 +148,8 @@ export default function SearchScreen({ navigation }) {
       country: '',
     });
     setApplied(null);
+    setResults([]);
+    setError(null);
   };
 
   const renderHeader = () => (
@@ -63,7 +165,7 @@ export default function SearchScreen({ navigation }) {
             Search & Filter
           </Text>
           <Text variant="bodyLarge" style={styles.subtitle}>
-            {results.length} profile{results.length !== 1 ? 's' : ''} found
+            {loading ? 'Searching...' : `${results.length} profile${results.length !== 1 ? 's' : ''} found`}
           </Text>
         </View>
       </View>
@@ -153,9 +255,13 @@ export default function SearchScreen({ navigation }) {
         
         <View style={styles.filterActions}>
           <CustomButton 
-            onPress={() => setApplied(filters)}
+            onPress={() => {
+              setApplied(filters);
+              performSearch(filters);
+            }}
             style={styles.applyButton}
             icon="check"
+            loading={loading}
           >
             Apply Filters
           </CustomButton>
