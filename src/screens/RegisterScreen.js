@@ -1,16 +1,22 @@
-import React, { useContext, useState } from 'react';
-import { View, StyleSheet, ScrollView, ImageBackground, Dimensions } from 'react-native';
-import { HelperText, Text, Surface, SegmentedButtons } from 'react-native-paper';
+import React, {useContext, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  ImageBackground,
+  Dimensions,
+} from 'react-native';
+import {Text, Surface, SegmentedButtons} from 'react-native-paper';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import { AuthContext } from '../context/AuthContext';
-import { userAPI } from '../services/api';
+import {AuthContext} from '../context/AuthContext';
+import {userAPI} from '../services/api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const { height } = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
-export default function RegisterScreen({ navigation }) {
-  const { register } = useContext(AuthContext);
+export default function RegisterScreen({navigation}) {
+  const {register} = useContext(AuthContext);
   const [form, setForm] = useState({
     fullName: '',
     email: '',
@@ -23,7 +29,7 @@ export default function RegisterScreen({ navigation }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
+  const set = (k, v) => setForm(p => ({...p, [k]: v}));
 
   const onSubmit = async () => {
     setError('');
@@ -37,7 +43,7 @@ export default function RegisterScreen({ navigation }) {
     }
     try {
       setSubmitting(true);
-      
+
       // Prepare user data for API
       const userData = {
         fullName: form.fullName,
@@ -50,7 +56,7 @@ export default function RegisterScreen({ navigation }) {
 
       // Call the API to create user
       const result = await userAPI.createUser(userData);
-      
+
       if (result.success) {
         // Update local context with the created user
         const createdUser = {
@@ -64,7 +70,7 @@ export default function RegisterScreen({ navigation }) {
           profile: result.data.profile || null,
           isProfileComplete: result.data.isProfileComplete || false,
         };
-        
+
         // Update the context with the created user
         await register(createdUser);
       } else {
@@ -80,24 +86,20 @@ export default function RegisterScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={{ uri: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' }}
+        source={{
+          uri: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+        }}
         style={styles.backgroundImage}
-        imageStyle={styles.backgroundImageStyle}
-      >
+        imageStyle={styles.backgroundImageStyle}>
         <View style={styles.overlay} />
-        
-        <ScrollView 
+
+        <ScrollView
           contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
+          showsVerticalScrollIndicator={false}>
           <Surface style={styles.formContainer} elevation={8}>
             <View style={styles.header}>
               <View style={styles.logoContainer}>
-                <Icon 
-                  name="account-plus" 
-                  size={48} 
-                  color="#FF6B6B" 
-                />
+                <Icon name="account-plus" size={48} color="#FF6B6B" />
               </View>
               <Text variant="headlineMedium" style={styles.title}>
                 Create Account
@@ -108,82 +110,79 @@ export default function RegisterScreen({ navigation }) {
             </View>
 
             <View style={styles.form}>
-              <CustomInput 
-                label="Full Name" 
-                value={form.fullName} 
-                onChangeText={(v) => set('fullName', v)}
+              <CustomInput
+                label="Full Name"
+                value={form.fullName}
+                onChangeText={v => set('fullName', v)}
                 left={<CustomInput.Icon icon="account" />}
               />
-              
-              <CustomInput 
-                label="Email" 
-                value={form.email} 
-                onChangeText={(v) => set('email', v)} 
+
+              <CustomInput
+                label="Email"
+                value={form.email}
+                onChangeText={v => set('email', v)}
                 autoCapitalize="none"
                 left={<CustomInput.Icon icon="email" />}
               />
-              
-              <CustomInput 
-                label="Phone" 
-                value={form.phone} 
-                onChangeText={(v) => set('phone', v)} 
+
+              <CustomInput
+                label="Phone"
+                value={form.phone}
+                onChangeText={v => set('phone', v)}
                 keyboardType="phone-pad"
                 left={<CustomInput.Icon icon="phone" />}
               />
 
               <View style={styles.genderContainer}>
-                <Text variant="bodyMedium" style={styles.genderLabel}>Gender</Text>
+                <Text variant="bodyMedium" style={styles.genderLabel}>
+                  Gender
+                </Text>
                 <SegmentedButtons
                   value={form.gender}
-                  onValueChange={(v) => set('gender', v)}
+                  onValueChange={v => set('gender', v)}
                   buttons={[
-                    { value: 'Male', label: 'Male', icon: 'gender-male' },
-                    { value: 'Female', label: 'Female', icon: 'gender-female' },
+                    {value: 'Male', label: 'Male', icon: 'gender-male'},
+                    {value: 'Female', label: 'Female', icon: 'gender-female'},
                   ]}
                   style={styles.segmentedButtons}
                 />
               </View>
-              
-              <CustomInput 
-                label="Date of Birth (YYYY-MM-DD)" 
-                value={form.dob} 
-                onChangeText={(v) => set('dob', v)}
+
+              <CustomInput
+                label="Date of Birth (YYYY-MM-DD)"
+                value={form.dob}
+                onChangeText={v => set('dob', v)}
                 left={<CustomInput.Icon icon="calendar" />}
               />
-              
-              <CustomInput 
-                label="Password" 
-                value={form.password} 
-                onChangeText={(v) => set('password', v)} 
+
+              <CustomInput
+                label="Password"
+                value={form.password}
+                onChangeText={v => set('password', v)}
                 secureTextEntry
                 left={<CustomInput.Icon icon="lock" />}
               />
-              
-              <CustomInput 
-                label="Confirm Password" 
-                value={form.confirmPassword} 
-                onChangeText={(v) => set('confirmPassword', v)} 
+
+              <CustomInput
+                label="Confirm Password"
+                value={form.confirmPassword}
+                onChangeText={v => set('confirmPassword', v)}
                 secureTextEntry
                 left={<CustomInput.Icon icon="lock-check" />}
               />
-              
+
               {error ? (
                 <View style={styles.errorContainer}>
-                  <Icon 
-                    name="alert-circle" 
-                    size={20} 
-                    color="#DC3545" 
-                  />
+                  <Icon name="alert-circle" size={20} color="#DC3545" />
                   <Text style={styles.errorText}>{error}</Text>
                 </View>
               ) : null}
 
-              <CustomButton 
-                loading={submitting} 
+              <CustomButton
+                loading={submitting}
                 onPress={onSubmit}
                 size="large"
-                style={styles.registerButton}
-              >
+                style={styles.registerButton}>
                 Create Account
               </CustomButton>
 
@@ -193,11 +192,10 @@ export default function RegisterScreen({ navigation }) {
                 <View style={styles.dividerLine} />
               </View>
 
-              <CustomButton 
-                mode="outlined" 
+              <CustomButton
+                mode="outlined"
                 onPress={() => navigation.navigate('Login')}
-                style={styles.loginButton}
-              >
+                style={styles.loginButton}>
                 Already have an account? Sign In
               </CustomButton>
             </View>
@@ -234,7 +232,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 48,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
+    shadowOffset: {width: 0, height: 8},
     shadowOpacity: 0.25,
     shadowRadius: 16,
     elevation: 16,
@@ -252,7 +250,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 4,
@@ -319,4 +317,3 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
 });
-

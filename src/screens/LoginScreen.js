@@ -1,15 +1,21 @@
-import React, { useContext, useState } from 'react';
-import { View, StyleSheet, ScrollView, ImageBackground, Dimensions } from 'react-native';
-import { Text, Surface } from 'react-native-paper';
+import React, {useContext, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  ImageBackground,
+  Dimensions,
+} from 'react-native';
+import {Text, Surface} from 'react-native-paper';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import { AuthContext } from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const { height } = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
-export default function LoginScreen({ navigation }) {
-  const { login } = useContext(AuthContext);
+export default function LoginScreen({navigation}) {
+  const {login} = useContext(AuthContext);
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -17,12 +23,12 @@ export default function LoginScreen({ navigation }) {
 
   const onSubmit = async () => {
     setError('');
-    
+
     if (!identifier.trim() || !password) {
       setError('Please enter both email/phone and password');
       return;
     }
-    
+
     try {
       setSubmitting(true);
       await login(identifier.trim(), password);
@@ -36,24 +42,20 @@ export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={{ uri: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' }}
+        source={{
+          uri: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+        }}
         style={styles.backgroundImage}
-        imageStyle={styles.backgroundImageStyle}
-      >
+        imageStyle={styles.backgroundImageStyle}>
         <View style={styles.overlay} />
-        
-        <ScrollView 
+
+        <ScrollView
           contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
+          showsVerticalScrollIndicator={false}>
           <Surface style={styles.formContainer} elevation={8}>
             <View style={styles.header}>
               <View style={styles.logoContainer}>
-                <Icon
-                  name="heart"
-                  size={48}
-                  color="#FF6B6B"
-                />
+                <Icon name="heart" size={48} color="#FF6B6B" />
               </View>
               <Text variant="headlineMedium" style={styles.title}>
                 Welcome Back
@@ -64,38 +66,33 @@ export default function LoginScreen({ navigation }) {
             </View>
 
             <View style={styles.form}>
-              <CustomInput 
-                label="Email or Phone" 
-                value={identifier} 
-                onChangeText={setIdentifier} 
+              <CustomInput
+                label="Email or Phone"
+                value={identifier}
+                onChangeText={setIdentifier}
                 autoCapitalize="none"
                 left={<CustomInput.Icon icon="email" />}
               />
-              <CustomInput 
-                label="Password" 
-                value={password} 
-                onChangeText={setPassword} 
+              <CustomInput
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
                 secureTextEntry
                 left={<CustomInput.Icon icon="lock" />}
               />
-              
+
               {error ? (
                 <View style={styles.errorContainer}>
-                  <Icon
-                    name="alert-circle"
-                    size={20}
-                    color="#DC3545"
-                  />
+                  <Icon name="alert-circle" size={20} color="#DC3545" />
                   <Text style={styles.errorText}>{error}</Text>
                 </View>
               ) : null}
 
-              <CustomButton 
-                onPress={onSubmit} 
+              <CustomButton
+                onPress={onSubmit}
                 loading={submitting}
                 size="large"
-                style={styles.loginButton}
-              >
+                style={styles.loginButton}>
                 Sign In
               </CustomButton>
 
@@ -105,19 +102,17 @@ export default function LoginScreen({ navigation }) {
                 <View style={styles.dividerLine} />
               </View>
 
-              <CustomButton 
-                mode="outlined" 
+              <CustomButton
+                mode="outlined"
                 onPress={() => navigation.navigate('Register')}
-                style={styles.registerButton}
-              >
+                style={styles.registerButton}>
                 Create New Account
               </CustomButton>
 
-              <CustomButton 
-                mode="text" 
+              <CustomButton
+                mode="text"
                 onPress={() => navigation.navigate('ForgotPassword')}
-                style={styles.forgotButton}
-              >
+                style={styles.forgotButton}>
                 Forgot Password?
               </CustomButton>
             </View>
@@ -154,7 +149,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 48,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
+    shadowOffset: {width: 0, height: 8},
     shadowOpacity: 0.25,
     shadowRadius: 16,
     elevation: 16,
@@ -172,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 4,
@@ -231,4 +226,3 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 });
-
