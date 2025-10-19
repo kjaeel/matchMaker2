@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
+import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { Text } from 'react-native-paper';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
@@ -50,7 +50,7 @@ export default function ProfileSetupScreen() {
   };
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
+    <ScrollView style={{ flex: 1, padding: 16 }}>
       <TouchableOpacity onPress={pickImage} style={{ alignSelf: 'center', marginBottom: 16 }}>
         {photoUri
           ? <Image source={{ uri: photoUri }} style={{ width: 100, height: 100, borderRadius: 50 }} />
@@ -72,7 +72,7 @@ export default function ProfileSetupScreen() {
       <CustomInput label="Country" value={profile.country} onChangeText={(v) => set('country', v)} />
 
       <CustomButton loading={saving} onPress={save}>Save & Continue</CustomButton>
-    </View>
+    </ScrollView>
   );
 }
 
