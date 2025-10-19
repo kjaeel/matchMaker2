@@ -92,7 +92,7 @@ export default function UserProfileScreen({ route, navigation }) {
   if (error && !profileData) {
     return (
       <View style={styles.loadingContainer}>
-        <MaterialIcons name="error-outline" size={80} color="#DC3545" />
+        <Icon name="alert-circle-outline" size={80} color="#DC3545" />
         <Text variant="headlineSmall" style={styles.emptyTitle}>
           Error Loading Profile
         </Text>

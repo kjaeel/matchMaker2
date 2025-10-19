@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Avatar, Button, Text, Chip } from 'react-native-paper';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
-import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function ProfileCard({ profile, liked, onLike, onPress }) {
   const initials = profile?.name?.split(' ').map(s => s[0]).join('').slice(0, 2).toUpperCase();
@@ -36,8 +36,8 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
                 style={[styles.likeButton, liked && styles.likedButton]}
                 onPress={onLike}
               >
-                       <MaterialIcons
-                         name={liked ? 'favorite' : 'favorite-border'}
+            <Icon
+              name={liked ? 'heart' : 'heart-outline'}
                          size={24}
                          color={liked ? '#FFFFFF' : '#FF6B6B'}
                        />
@@ -57,8 +57,8 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
           </View>
           
           <View style={styles.locationContainer}>
-                   <MaterialIcons
-                     name="location-on"
+            <Icon
+              name="map-marker"
                      size={16}
                      color="#6C757D"
                    />
@@ -86,8 +86,8 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
           
           <View style={styles.detailsContainer}>
             <View style={styles.detailRow}>
-                     <MaterialIcons
-                       name="school"
+            <Icon
+              name="school"
                        size={16}
                        color="#6C757D"
                      />
@@ -96,8 +96,8 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
               </Text>
             </View>
             <View style={styles.detailRow}>
-                     <MaterialIcons
-                       name="work"
+            <Icon
+              name="briefcase"
                        size={16}
                        color="#6C757D"
                      />
@@ -106,8 +106,8 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
               </Text>
             </View>
             <View style={styles.detailRow}>
-                     <MaterialIcons
-                       name="height"
+            <Icon
+              name="human-male-height"
                        size={16}
                        color="#6C757D"
                      />

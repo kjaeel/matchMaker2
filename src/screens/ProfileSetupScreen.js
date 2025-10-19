@@ -5,7 +5,7 @@ import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { AuthContext } from '../context/AuthContext';
-import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { width } = Dimensions.get('window');
 
@@ -74,8 +74,8 @@ export default function ProfileSetupScreen() {
   const renderHeader = () => (
     <Surface style={styles.header} elevation={2}>
       <View style={styles.headerContent}>
-        <MaterialIcons
-          name="person-add"
+        <Icon
+          name="account-plus"
           size={32}
           color="#FF6B6B"
         />
@@ -99,7 +99,7 @@ export default function ProfileSetupScreen() {
           <Image source={{ uri: photoUri }} style={styles.photo} />
         ) : (
           <View style={styles.photoPlaceholder}>
-            <MaterialIcons name="camera-alt" size={40} color="#6C757D" />
+            <Icon name="camera" size={40} color="#6C757D" />
             <Text variant="bodyMedium" style={styles.photoText}>Add Photo</Text>
           </View>
         )}
@@ -212,7 +212,7 @@ export default function ProfileSetupScreen() {
         
         {error ? (
           <View style={styles.errorContainer}>
-            <MaterialIcons name="error" size={20} color="#DC3545" />
+            <Icon name="alert-circle" size={20} color="#DC3545" />
             <Text style={styles.errorText}>{error}</Text>
           </View>
         ) : null}

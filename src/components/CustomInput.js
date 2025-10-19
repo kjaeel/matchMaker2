@@ -2,9 +2,16 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 
+// Icon component for CustomInput
+const CustomInputIcon = ({ icon, ...props }) => (
+  <TextInput.Icon icon={icon} {...props} />
+);
+
 export default function CustomInput({ 
   style, 
   size = 'medium',
+  left,
+  right,
   ...props 
 }) {
   const inputStyle = [
@@ -20,10 +27,15 @@ export default function CustomInput({
       style={inputStyle}
       outlineStyle={styles.outline}
       contentStyle={styles.content}
+      left={left}
+      right={right}
       {...props}
     />
   );
 }
+
+// Attach Icon component to CustomInput
+CustomInput.Icon = CustomInputIcon;
 
 const styles = StyleSheet.create({
   input: {

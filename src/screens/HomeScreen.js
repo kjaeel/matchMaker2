@@ -5,7 +5,7 @@ import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
 import { userAPI } from '../services/api';
-import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { width } = Dimensions.get('window');
 
@@ -99,11 +99,11 @@ export default function HomeScreen({ navigation }) {
       
       <View style={styles.statsContainer}>
         <Surface style={styles.statCard} elevation={2}>
-               <MaterialIcons
-                 name="favorite"
-                 size={24}
-                 color="#FF6B6B"
-               />
+          <Icon
+            name="heart"
+            size={24}
+            color="#FF6B6B"
+          />
           <Text variant="titleMedium" style={styles.statNumber}>
             {likedProfileIds.length}
           </Text>
@@ -113,11 +113,11 @@ export default function HomeScreen({ navigation }) {
         </Surface>
         
         <Surface style={styles.statCard} elevation={2}>
-               <MaterialIcons
-                 name="group"
-                 size={24}
-                 color="#4ECDC4"
-               />
+          <Icon
+            name="account-group"
+            size={24}
+            color="#4ECDC4"
+          />
           <Text variant="titleMedium" style={styles.statNumber}>
             {profiles.length}
           </Text>
@@ -170,8 +170,8 @@ export default function HomeScreen({ navigation }) {
         </>
       ) : error ? (
         <>
-          <MaterialIcons
-            name="error-outline"
+          <Icon
+            name="alert-circle-outline"
             size={80}
             color="#DC3545"
           />
@@ -184,8 +184,8 @@ export default function HomeScreen({ navigation }) {
         </>
       ) : (
         <>
-          <MaterialIcons
-            name="favorite-border"
+          <Icon
+            name="heart-outline"
             size={80}
             color="#ADB5BD"
           />

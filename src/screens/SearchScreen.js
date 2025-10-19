@@ -7,7 +7,7 @@ import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
 import { userAPI } from '../services/api';
-import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function SearchScreen({ navigation }) {
   const { likedProfileIds, toggleLike } = useContext(AuthContext);
@@ -155,11 +155,11 @@ export default function SearchScreen({ navigation }) {
   const renderHeader = () => (
     <Surface style={styles.header} elevation={2}>
       <View style={styles.headerContent}>
-               <MaterialIcons
-                 name="search"
-                 size={32}
-                 color="#FF6B6B"
-               />
+        <Icon
+          name="magnify"
+          size={32}
+          color="#FF6B6B"
+        />
         <View style={styles.headerText}>
           <Text variant="headlineMedium" style={styles.title}>
             Search & Filter
@@ -183,10 +183,10 @@ export default function SearchScreen({ navigation }) {
 
   const renderFilters = () => (
     <Surface style={styles.filtersContainer} elevation={1}>
-             <View style={styles.filtersHeader}>
-               <MaterialIcons name="filter-list" size={20} color="#FF6B6B" />
-               <Text variant="titleMedium" style={styles.filtersTitle}>Search Filters</Text>
-             </View>
+      <View style={styles.filtersHeader}>
+        <Icon name="filter-variant" size={20} color="#FF6B6B" />
+        <Text variant="titleMedium" style={styles.filtersTitle}>Search Filters</Text>
+      </View>
       
       <ScrollView 
         showsVerticalScrollIndicator={false}
@@ -291,8 +291,8 @@ export default function SearchScreen({ navigation }) {
         </>
       ) : error ? (
         <>
-          <MaterialIcons
-            name="error-outline"
+          <Icon
+            name="alert-circle-outline"
             size={80}
             color="#DC3545"
           />
@@ -305,8 +305,8 @@ export default function SearchScreen({ navigation }) {
         </>
       ) : (
         <>
-          <MaterialIcons
-            name="search"
+          <Icon
+            name="magnify"
             size={80}
             color="#ADB5BD"
           />

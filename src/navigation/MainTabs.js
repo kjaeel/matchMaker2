@@ -6,7 +6,7 @@ import SearchScreen from '../screens/SearchScreen';
 import MatchesScreen from '../screens/MatchesScreen';
 import ChatScreen from '../screens/ChatScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
-import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,7 +45,7 @@ export default function MainTabs() {
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons 
+            <Icon 
               name="home" 
               color={color} 
               size={size} 
@@ -59,8 +59,8 @@ export default function MainTabs() {
         component={SearchScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons 
-              name="search" 
+            <Icon 
+              name="magnify" 
               color={color} 
               size={size} 
             />
@@ -73,8 +73,8 @@ export default function MainTabs() {
         component={MatchesScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons 
-              name="favorite" 
+            <Icon 
+              name="heart" 
               color={color} 
               size={size} 
             />
@@ -87,7 +87,7 @@ export default function MainTabs() {
         component={ChatScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons 
+            <Icon 
               name="chat" 
               color={color} 
               size={size} 
@@ -101,8 +101,8 @@ export default function MainTabs() {
         component={UserProfileScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons 
-              name="person" 
+            <Icon 
+              name="account" 
               color={color} 
               size={size} 
             />
