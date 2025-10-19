@@ -1,13 +1,14 @@
 import React, { useContext, useMemo, useState } from 'react';
-import { View, FlatList } from 'react-native';
-import { Text } from 'react-native-paper';
+import { View, FlatList, StyleSheet, ScrollView } from 'react-native';
+import { Text, Surface, Chip, FAB } from 'react-native-paper';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
-export default function SearchScreen() {
+export default function SearchScreen({ navigation }) {
   const { likedProfileIds, toggleLike } = useContext(AuthContext);
   const [filters, setFilters] = useState({
     minAge: '',
@@ -19,6 +20,7 @@ export default function SearchScreen() {
     country: '',
   });
   const [applied, setApplied] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
   const set = (k, v) => setFilters((p) => ({ ...p, [k]: v }));
 
   const results = useMemo(() => {
@@ -35,31 +37,283 @@ export default function SearchScreen() {
     });
   }, [applied]);
 
-  return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <Text variant="titleMedium" style={{ marginBottom: 8 }}>Filters</Text>
-      <CustomInput label="Min Age" value={filters.minAge} onChangeText={(v) => set('minAge', v)} keyboardType="numeric" />
-      <CustomInput label="Max Age" value={filters.maxAge} onChangeText={(v) => set('maxAge', v)} keyboardType="numeric" />
-      <CustomInput label="Caste" value={filters.caste} onChangeText={(v) => set('caste', v)} />
-      <CustomInput label="Religion" value={filters.religion} onChangeText={(v) => set('religion', v)} />
-      <CustomInput label="City" value={filters.city} onChangeText={(v) => set('city', v)} />
-      <CustomInput label="State" value={filters.state} onChangeText={(v) => set('state', v)} />
-      <CustomInput label="Country" value={filters.country} onChangeText={(v) => set('country', v)} />
-      <CustomButton onPress={() => setApplied(filters)}>Apply Filters</CustomButton>
+  const clearFilters = () => {
+    setFilters({
+      minAge: '',
+      maxAge: '',
+      caste: '',
+      religion: '',
+      city: '',
+      state: '',
+      country: '',
+    });
+    setApplied(null);
+  };
 
-      <Text variant="titleMedium" style={{ marginVertical: 8 }}>Results</Text>
+  const renderHeader = () => (
+    <Surface style={styles.header} elevation={2}>
+      <View style={styles.headerContent}>
+               <MaterialIcons
+                 name="search"
+                 size={32}
+                 color="#FF6B6B"
+               />
+        <View style={styles.headerText}>
+          <Text variant="headlineMedium" style={styles.title}>
+            Search & Filter
+          </Text>
+          <Text variant="bodyLarge" style={styles.subtitle}>
+            {results.length} profile{results.length !== 1 ? 's' : ''} found
+          </Text>
+        </View>
+      </View>
+      
+      <CustomButton 
+        mode="outlined" 
+        onPress={() => setShowFilters(!showFilters)}
+        style={styles.filterToggle}
+        size="small"
+      >
+        {showFilters ? 'Hide Filters' : 'Show Filters'}
+      </CustomButton>
+    </Surface>
+  );
+
+  const renderFilters = () => (
+    <Surface style={styles.filtersContainer} elevation={1}>
+             <View style={styles.filtersHeader}>
+               <MaterialIcons name="filter-list" size={20} color="#FF6B6B" />
+               <Text variant="titleMedium" style={styles.filtersTitle}>Search Filters</Text>
+             </View>
+      
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.filtersContent}
+      >
+        <View style={styles.inputRow}>
+          <View style={styles.halfWidth}>
+            <CustomInput 
+              label="Min Age" 
+              value={filters.minAge} 
+              onChangeText={(v) => set('minAge', v)} 
+              keyboardType="numeric"
+              size="small"
+            />
+          </View>
+          <View style={styles.halfWidth}>
+            <CustomInput 
+              label="Max Age" 
+              value={filters.maxAge} 
+              onChangeText={(v) => set('maxAge', v)} 
+              keyboardType="numeric"
+              size="small"
+            />
+          </View>
+        </View>
+        
+        <CustomInput 
+          label="Religion" 
+          value={filters.religion} 
+          onChangeText={(v) => set('religion', v)}
+          size="small"
+        />
+        
+        <CustomInput 
+          label="Caste" 
+          value={filters.caste} 
+          onChangeText={(v) => set('caste', v)}
+          size="small"
+        />
+        
+        <View style={styles.inputRow}>
+          <View style={styles.halfWidth}>
+            <CustomInput 
+              label="City" 
+              value={filters.city} 
+              onChangeText={(v) => set('city', v)}
+              size="small"
+            />
+          </View>
+          <View style={styles.halfWidth}>
+            <CustomInput 
+              label="State" 
+              value={filters.state} 
+              onChangeText={(v) => set('state', v)}
+              size="small"
+            />
+          </View>
+        </View>
+        
+        <CustomInput 
+          label="Country" 
+          value={filters.country} 
+          onChangeText={(v) => set('country', v)}
+          size="small"
+        />
+        
+        <View style={styles.filterActions}>
+          <CustomButton 
+            onPress={() => setApplied(filters)}
+            style={styles.applyButton}
+            icon="check"
+          >
+            Apply Filters
+          </CustomButton>
+          <CustomButton 
+            mode="outlined" 
+            onPress={clearFilters}
+            style={styles.clearButton}
+            icon="close"
+          >
+            Clear
+          </CustomButton>
+        </View>
+      </ScrollView>
+    </Surface>
+  );
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyState}>
+             <MaterialIcons
+               name="search"
+               size={80}
+               color="#ADB5BD"
+             />
+      <Text variant="headlineSmall" style={styles.emptyTitle}>
+        No results found
+      </Text>
+      <Text variant="bodyLarge" style={styles.emptySubtitle}>
+        Try adjusting your search filters
+      </Text>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
       <FlatList
         data={results}
         keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+          <View>
+            {renderHeader()}
+            {showFilters && renderFilters()}
+          </View>
+        }
+        ListEmptyComponent={renderEmptyState}
         renderItem={({ item }) => (
           <ProfileCard
             profile={item}
             liked={likedProfileIds.includes(item.id)}
             onLike={() => toggleLike(item.id)}
+            onPress={() => navigation.navigate('UserProfile', { profile: item })}
           />
         )}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
       />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FAFBFC',
+  },
+  listContent: {
+    paddingBottom: 100,
+  },
+  header: {
+    margin: 24,
+    marginBottom: 16,
+    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 24,
+  },
+  headerText: {
+    marginLeft: 16,
+    flex: 1,
+  },
+  title: {
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginBottom: 4,
+  },
+  subtitle: {
+    color: '#6C757D',
+  },
+         filterToggle: {
+          //  marginHorizontal: 24,
+          
+           marginTop: 0,
+           marginBottom: 16,
+         },
+         filtersContainer: {
+           marginHorizontal: 24,
+           marginTop: 0,
+           marginBottom: 16,
+           borderRadius: 16,
+           backgroundColor: '#FFFFFF',
+           maxHeight: 500,
+         },
+  filtersHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E9ECEF',
+  },
+  filtersTitle: {
+    fontWeight: '600',
+    color: '#2C3E50',
+    marginLeft: 8,
+    flex: 1,
+  },
+  filtersContent: {
+    padding: 20,
+  },
+  inputRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 16,
+  },
+  halfWidth: {
+    flex: 1,
+  },
+  filterActions: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 8,
+  },
+  applyButton: {
+    flex: 1,
+  },
+  clearButton: {
+    flex: 1,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 48,
+    marginTop: 64,
+  },
+  emptyTitle: {
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginTop: 24,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    color: '#6C757D',
+    textAlign: 'center',
+    lineHeight: 1.6 * 18,
+  },
+});
 
