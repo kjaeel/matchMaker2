@@ -17,6 +17,12 @@ export default function LoginScreen({ navigation }) {
 
   const onSubmit = async () => {
     setError('');
+    
+    if (!identifier.trim() || !password) {
+      setError('Please enter both email/phone and password');
+      return;
+    }
+    
     try {
       setSubmitting(true);
       await login(identifier.trim(), password);

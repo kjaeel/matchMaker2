@@ -41,16 +41,29 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (identifier, password) => {
     if (!identifier || !password) throw new Error('Missing credentials');
+    
+    // For demo purposes, create a user with complete profile
+    // In real app, this would validate against backend
     const nextUser = {
       id: 'u1',
-      fullName: 'New User',
+      fullName: 'Demo User',
       email: identifier.includes('@') ? identifier : undefined,
       phone: !identifier.includes('@') ? identifier : undefined,
-      gender: undefined,
-      dob: undefined,
+      gender: 'Male',
+      dob: '1995-01-01',
       photoUri: undefined,
-      profile: null,
-      isProfileComplete: false,
+      profile: {
+        age: 28,
+        heightCm: 175,
+        education: 'B.Tech',
+        occupation: 'Software Engineer',
+        religion: 'Hindu',
+        caste: 'Brahmin',
+        city: 'Bengaluru',
+        state: 'Karnataka',
+        country: 'India',
+      },
+      isProfileComplete: true, // Set to true for login flow
     };
     setUser(nextUser);
     await persist(nextUser, undefined);
@@ -66,7 +79,7 @@ export function AuthProvider({ children }) {
       dob: payload.dob || undefined,
       photoUri: undefined,
       profile: null,
-      isProfileComplete: false,
+      isProfileComplete: false, // Set to false for register flow - will show profile setup
     };
     setUser(nextUser);
     await persist(nextUser, undefined);

@@ -262,6 +262,7 @@ export default function SearchScreen({ navigation }) {
             style={styles.applyButton}
             icon="check"
             loading={loading}
+            disabled={loading}
           >
             Apply Filters
           </CustomButton>
@@ -270,6 +271,7 @@ export default function SearchScreen({ navigation }) {
             onPress={clearFilters}
             style={styles.clearButton}
             icon="close"
+            disabled={loading}
           >
             Clear
           </CustomButton>
@@ -330,7 +332,7 @@ export default function SearchScreen({ navigation }) {
             {showFilters && renderFilters()}
           </View>
         }
-        ListEmptyComponent={renderEmptyState}
+        ListEmptyComponent={!loading ? renderEmptyState : null}
         renderItem={({ item }) => (
           <ProfileCard
             profile={item}

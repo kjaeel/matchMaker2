@@ -88,6 +88,21 @@ export default function UserProfileScreen({ route, navigation }) {
     );
   }
 
+  // Handle error state
+  if (error && !profileData) {
+    return (
+      <View style={styles.loadingContainer}>
+        <MaterialIcons name="error-outline" size={80} color="#DC3545" />
+        <Text variant="headlineSmall" style={styles.emptyTitle}>
+          Error Loading Profile
+        </Text>
+        <Text variant="bodyLarge" style={styles.emptySubtitle}>
+          {error}
+        </Text>
+      </View>
+    );
+  }
+
   const renderProfileHeader = () => (
     <Surface style={styles.header} elevation={4}>
       <View style={styles.headerContent}>
@@ -388,6 +403,18 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 16,
     color: '#6C757D',
+  },
+  emptyTitle: {
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginTop: 24,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    color: '#6C757D',
+    textAlign: 'center',
+    lineHeight: 1.6 * 18,
   },
 });
 
