@@ -5,6 +5,7 @@ import { PaperProvider, MD3LightTheme } from 'react-native-paper';
 import { AuthProvider } from './src/context/AuthContext';
 import AppNavigator from './src/navigation/AppNavigator';
 
+
 // Simple theme for now
 const theme = {
   ...MD3LightTheme,
@@ -18,6 +19,8 @@ const theme = {
 };
 
 export default function App() {
+
+
   return (
     <PaperProvider theme={theme}>
       <AuthProvider>

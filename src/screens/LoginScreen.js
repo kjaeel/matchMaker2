@@ -11,8 +11,9 @@ import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import {AuthContext} from '../context/AuthContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import LinearGradient from 'react-native-linear-gradient';
 
-const {height} = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 export default function LoginScreen({navigation}) {
   const {login} = useContext(AuthContext);
@@ -41,29 +42,52 @@ export default function LoginScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={{
-          uri: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-        }}
-        style={styles.backgroundImage}
-        imageStyle={styles.backgroundImageStyle}>
-        <View style={styles.overlay} />
+      <LinearGradient
+        colors={['#8B0000', '#DC143C', '#FF6347', '#FFD700']}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 1}}
+        style={styles.gradientBackground}>
+        <ImageBackground
+          source={{
+            uri: 'https://images.unsplash.com/photo-1606800053802-afa47e2f990d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+          }}
+          style={styles.backgroundImage}
+          imageStyle={styles.backgroundImageStyle}>
+          <View style={styles.overlay} />
+          
+          {/* Decorative top pattern */}
+          <View style={styles.topPattern}>
+            <View style={styles.patternCircle} />
+            <View style={[styles.patternCircle, styles.patternCircleRight]} />
+          </View>
 
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}>
-          <Surface style={styles.formContainer} elevation={8}>
-            <View style={styles.header}>
-              <View style={styles.logoContainer}>
-                <Icon name="heart" size={48} color="#FF6B6B" />
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}>
+            <Surface style={styles.formContainer} elevation={8}>
+              {/* Decorative border */}
+              <View style={styles.decorativeBorder}>
+                <View style={styles.borderPattern} />
               </View>
-              <Text variant="headlineMedium" style={styles.title}>
-                Welcome Back
-              </Text>
-              <Text variant="bodyLarge" style={styles.subtitle}>
-                Sign in to find your perfect match
-              </Text>
-            </View>
+              
+              <View style={styles.header}>
+                <View style={styles.logoContainer}>
+                  <LinearGradient
+                    colors={['#FFD700', '#FFA500', '#FF6347']}
+                    start={{x: 0, y: 0}}
+                    end={{x: 1, y: 1}}
+                    style={styles.logoGradient}>
+                    <Icon name="heart" size={52} color="#8B0000" />
+                  </LinearGradient>
+                  <View style={styles.logoGlow} />
+                </View>
+                <Text variant="headlineMedium" style={styles.title}>
+                  Welcome Back
+                </Text>
+                <Text variant="bodyLarge" style={styles.subtitle}>
+                  Sign in to find your perfect match
+                </Text>
+              </View>
 
             <View style={styles.form}>
               <CustomInput
@@ -93,12 +117,14 @@ export default function LoginScreen({navigation}) {
                 loading={submitting}
                 size="large"
                 style={styles.loginButton}>
-                Sign In
+                <Text style={styles.buttonText}>Sign In</Text>
               </CustomButton>
 
               <View style={styles.divider}>
                 <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>or</Text>
+                <View style={styles.dividerCircle}>
+                  <Icon name="flower" size={16} color="#8B0000" />
+                </View>
                 <View style={styles.dividerLine} />
               </View>
 
@@ -106,19 +132,33 @@ export default function LoginScreen({navigation}) {
                 mode="outlined"
                 onPress={() => navigation.navigate('Register')}
                 style={styles.registerButton}>
-                Create New Account
+                <Text style={styles.outlinedButtonText}>Create Account</Text>
               </CustomButton>
 
               <CustomButton
                 mode="text"
                 onPress={() => navigation.navigate('ForgotPassword')}
                 style={styles.forgotButton}>
-                Forgot Password?
+                <Text style={styles.forgotButtonText}>Forgot Password?</Text>
               </CustomButton>
+            </View>
+            
+            {/* Decorative bottom pattern */}
+            <View style={styles.bottomPattern}>
+              <Icon name="flower-outline" size={20} color="#FFD700" style={styles.bottomIcon} />
+              <Icon name="flower-outline" size={16} color="#FF6347" style={styles.bottomIcon} />
+              <Icon name="flower-outline" size={20} color="#FFD700" style={styles.bottomIcon} />
             </View>
           </Surface>
         </ScrollView>
+        
+        {/* Decorative bottom pattern */}
+        <View style={styles.bottomPatternOuter}>
+          <View style={styles.patternCircleBottom} />
+          <View style={[styles.patternCircleBottom, styles.patternCircleBottomRight]} />
+        </View>
       </ImageBackground>
+      </LinearGradient>
     </View>
   );
 }
@@ -127,61 +167,133 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  gradientBackground: {
+    flex: 1,
+    width: '100%',
+  },
   backgroundImage: {
     flex: 1,
     width: '100%',
     height: height,
   },
   backgroundImageStyle: {
-    opacity: 0.3,
+    opacity: 0.25,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: 'rgba(139, 0, 0, 0.3)',
+  },
+  topPattern: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 120,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 40,
+    paddingTop: 20,
+  },
+  patternCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+    borderWidth: 3,
+    borderColor: '#FFD700',
+    borderStyle: 'dashed',
+  },
+  patternCircleRight: {
+    backgroundColor: 'rgba(255, 99, 71, 0.2)',
+    borderColor: '#FF6347',
   },
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
     padding: 24,
+    paddingTop: 100,
   },
   formContainer: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    padding: 48,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 8},
-    shadowOpacity: 0.25,
-    shadowRadius: 16,
-    elevation: 16,
+    borderRadius: 32,
+    padding: 32,
+    shadowColor: '#8B0000',
+    shadowOffset: {width: 0, height: 12},
+    shadowOpacity: 0.4,
+    shadowRadius: 24,
+    elevation: 20,
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    position: 'relative',
+    overflow: 'visible',
+  },
+  decorativeBorder: {
+    position: 'absolute',
+    top: -2,
+    left: -2,
+    right: -2,
+    bottom: -2,
+    borderRadius: 32,
+    borderWidth: 2,
+    borderColor: '#FF6347',
+    borderStyle: 'dashed',
+    opacity: 0.6,
+  },
+  borderPattern: {
+    flex: 1,
+    borderTopWidth: 1,
+    borderTopColor: '#FFD700',
   },
   header: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: 32,
   },
   logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#FF8E8E',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 4,
+    marginBottom: 20,
+    position: 'relative',
+  },
+  logoGradient: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#FFD700',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  logoGlow: {
+    position: 'absolute',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: 'rgba(255, 215, 0, 0.3)',
+    zIndex: -1,
   },
   title: {
     fontWeight: '700',
-    color: '#2C3E50',
-    marginBottom: 8,
+    color: '#8B0000',
+    marginBottom: 12,
     textAlign: 'center',
+    fontSize: 32,
+    textShadowColor: 'rgba(255, 215, 0, 0.5)',
+    textShadowOffset: {width: 0, height: 2},
+    textShadowRadius: 4,
   },
   subtitle: {
-    color: '#6C757D',
+    color: '#8B0000',
     textAlign: 'center',
-    lineHeight: 1.6 * 18,
+    lineHeight: 24,
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 4,
   },
   form: {
     gap: 16,
@@ -193,6 +305,8 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     marginVertical: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#DC3545',
   },
   errorText: {
     color: '#DC3545',
@@ -202,6 +316,19 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     marginTop: 24,
+    backgroundColor: '#8B0000',
+    borderRadius: 16,
+    paddingVertical: 4,
+    shadowColor: '#8B0000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+    fontSize: 16,
   },
   divider: {
     flexDirection: 'row',
@@ -210,19 +337,72 @@ const styles = StyleSheet.create({
   },
   dividerLine: {
     flex: 1,
-    height: 1,
-    backgroundColor: '#CED4DA',
+    height: 2,
+    backgroundColor: '#FFD700',
+    borderRadius: 1,
   },
-  dividerText: {
-    marginHorizontal: 16,
-    color: '#6C757D',
-    fontWeight: '500',
+  dividerCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    marginHorizontal: 8,
   },
   registerButton: {
-    borderColor: '#FF6B6B',
-    borderWidth: 2,
+    borderColor: '#DC143C',
+    borderWidth: 2.5,
+    borderRadius: 16,
+    backgroundColor: 'transparent',
+  },
+  outlinedButtonText: {
+    color: '#DC143C',
+    fontWeight: '600',
+    fontSize: 15,
   },
   forgotButton: {
     marginTop: 8,
+  },
+  forgotButtonText: {
+    color: '#8B0000',
+    fontWeight: '500',
+    fontSize: 14,
+  },
+  bottomPattern: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 24,
+    gap: 16,
+  },
+  bottomIcon: {
+    opacity: 0.6,
+  },
+  bottomPatternOuter: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 100,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 40,
+    paddingBottom: 20,
+  },
+  patternCircleBottom: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255, 215, 0, 0.15)',
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    borderStyle: 'dashed',
+  },
+  patternCircleBottomRight: {
+    backgroundColor: 'rgba(255, 99, 71, 0.15)',
+    borderColor: '#FF6347',
   },
 });

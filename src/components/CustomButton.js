@@ -72,10 +72,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   outlinedLabel: {
-    color: '#FF6B6B',
+    color: '#8B0000',
   },
   textLabel: {
-    color: '#FF6B6B',
+    color: '#8B0000',
   },
 });
 

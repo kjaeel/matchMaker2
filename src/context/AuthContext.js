@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import { userAPI } from '../services/api';
 
 const SESSION_KEY = 'MM_SESSION_V1';
 
@@ -42,29 +43,39 @@ export function AuthProvider({ children }) {
   const login = useCallback(async (identifier, password) => {
     if (!identifier || !password) throw new Error('Missing credentials');
     
-    // For demo purposes, create a user with complete profile
-    // In real app, this would validate against backend
+    // Call login API
+    const result = await userAPI.login(identifier, password);
+    
+    if (!result.success) {
+      throw new Error(result.error || 'Login failed');
+    }
+    
+    // Store the result in context
+    const userData = result.data;
     const nextUser = {
-      id: 'u1',
-      fullName: 'Demo User',
-      email: identifier.includes('@') ? identifier : undefined,
-      phone: !identifier.includes('@') ? identifier : undefined,
-      gender: 'Male',
-      dob: '1995-01-01',
-      photoUri: undefined,
-      profile: {
-        age: 28,
-        heightCm: 175,
-        education: 'B.Tech',
-        occupation: 'Software Engineer',
-        religion: 'Hindu',
-        caste: 'Brahmin',
-        city: 'Bengaluru',
-        state: 'Karnataka',
-        country: 'India',
+      id: userData.id || userData.userId,
+      fullName: userData.fullName || userData.name,
+      email: userData.email,
+      phone: userData.phone,
+      gender: userData.gender,
+      dob: userData.dob || userData.dateOfBirth,
+      photoUri: userData.photoUri || userData.photo,
+      profile: userData.profile || {
+        age: userData.age,
+        heightCm: userData.heightCm,
+        education: userData.education,
+        occupation: userData.occupation,
+        religion: userData.religion,
+        caste: userData.caste,
+        city: userData.city,
+        state: userData.state,
+        country: userData.country,
+        interests: userData.interests || [],
       },
-      isProfileComplete: true, // Set to true for login flow
+      interests: userData.interests || [],
+      isProfileComplete: userData.isProfileComplete || !!userData.profile,
     };
+    
     setUser(nextUser);
     await persist(nextUser, undefined);
   }, [persist]);
@@ -79,6 +90,7 @@ export function AuthProvider({ children }) {
       dob: payload.dob || undefined,
       photoUri: undefined,
       profile: null,
+      interests: payload.interests || [],
       isProfileComplete: false, // Set to false for register flow - will show profile setup
     };
     setUser(nextUser);
@@ -86,7 +98,12 @@ export function AuthProvider({ children }) {
   }, [persist]);
 
   const completeProfile = useCallback(async (profile) => {
-    const nextUser = { ...(user || {}), profile, isProfileComplete: true };
+    const nextUser = { 
+      ...(user || {}), 
+      profile, 
+      interests: profile.interests || user?.interests || [],
+      isProfileComplete: true 
+    };
     setUser(nextUser);
     await persist(nextUser, undefined);
   }, [persist, user]);

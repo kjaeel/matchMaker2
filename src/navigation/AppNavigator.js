@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthStack from './AuthStack';
 import MainTabs from './MainTabs';
@@ -7,11 +7,32 @@ import ProfileSetupScreen from '../screens/ProfileSetupScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import { ActivityIndicator } from 'react-native-paper';
 import { View } from 'react-native';
+import { getRemoteConfig, setDefaults, fetchAndActivate, getValue } from '@react-native-firebase/remote-config';
+
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
   const { isLoading, user } = useContext(AuthContext);
+
+  useEffect(() => {
+    const initRemoteConfig = async () => {
+      try {
+        const configInstance = getRemoteConfig();
+        await setDefaults(configInstance, {
+          shouldUpdate: 'false',
+        });
+
+        await fetchAndActivate(configInstance);
+        const shouldUpdateValue = getValue(configInstance, 'shouldUpdate').asString();
+        console.log('Remote config shouldUpdate:', shouldUpdateValue);
+      } catch (error) {
+        console.warn('Remote config initialization failed:', error);
+      }
+    };
+
+    initRemoteConfig();
+  }, []);
 
   if (isLoading) {
     return (

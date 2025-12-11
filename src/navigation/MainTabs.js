@@ -15,20 +15,20 @@ export default function MainTabs() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#FF6B6B',
+        tabBarActiveTintColor: '#8B0000',
         tabBarInactiveTintColor: '#6C757D',
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
-          borderTopColor: '#DEE2E6',
-          borderTopWidth: 1,
+          borderTopColor: '#FFD700',
+          borderTopWidth: 2,
           paddingBottom: Platform.OS === 'ios' ? 20 : 8,
           paddingTop: 8,
           height: Platform.OS === 'ios' ? 88 : 64,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.2,
-          shadowRadius: 8,
-          elevation: 8,
+          shadowColor: '#8B0000',
+          shadowOffset: { width: 0, height: -4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 12,
+          elevation: 12,
         },
         tabBarLabelStyle: {
           fontSize: 12,

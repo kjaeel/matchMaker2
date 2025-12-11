@@ -6,6 +6,7 @@ import CustomButton from '../components/CustomButton';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { AuthContext } from '../context/AuthContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { availableInterests } from '../data/interests';
 
 const { width } = Dimensions.get('window');
 
@@ -21,6 +22,7 @@ export default function ProfileSetupScreen() {
     city: '',
     state: '',
     country: '',
+    interests: [],
   });
   const [photoUri, setPhoto] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -63,6 +65,7 @@ export default function ProfileSetupScreen() {
         city: profile.city,
         state: profile.state || 'Not specified',
         country: profile.country || 'India',
+        interests: profile.interests || [],
       });
     } catch (err) {
       setError(err.message || 'Failed to save profile');
@@ -77,7 +80,7 @@ export default function ProfileSetupScreen() {
         <Icon
           name="account-plus"
           size={32}
-          color="#FF6B6B"
+          color="#8B0000"
         />
         <View style={styles.headerText}>
           <Text variant="headlineMedium" style={styles.title}>
@@ -199,6 +202,48 @@ export default function ProfileSetupScreen() {
     </Surface>
   );
 
+  const renderInterestsSection = () => (
+    <Surface style={styles.detailsSection} elevation={2}>
+      <Text variant="titleMedium" style={styles.sectionTitle}>Interests</Text>
+      <Text variant="bodySmall" style={styles.sectionSubtitle}>
+        Select your hobbies and interests to help others discover you
+      </Text>
+      <View style={styles.interestsChips}>
+        {availableInterests.map((interest) => {
+          const isSelected = profile.interests.includes(interest);
+          return (
+            <Chip
+              key={interest}
+              selected={isSelected}
+              onPress={() => {
+                if (isSelected) {
+                  set('interests', profile.interests.filter(i => i !== interest));
+                } else {
+                  set('interests', [...profile.interests, interest]);
+                }
+              }}
+              style={[
+                styles.interestChip,
+                isSelected && styles.selectedInterestChip,
+              ]}
+              textStyle={[
+                styles.interestChipText,
+                isSelected && styles.selectedInterestChipText,
+              ]}
+            >
+              {interest}
+            </Chip>
+          );
+        })}
+      </View>
+      {profile.interests.length > 0 && (
+        <Text variant="bodySmall" style={styles.interestsCount}>
+          {profile.interests.length} interest{profile.interests.length !== 1 ? 's' : ''} selected
+        </Text>
+      )}
+    </Surface>
+  );
+
   return (
     <View style={styles.container}>
       <ScrollView 
@@ -209,6 +254,7 @@ export default function ProfileSetupScreen() {
         {renderPhotoSection()}
         {renderBasicDetails()}
         {renderPersonalDetails()}
+        {renderInterestsSection()}
         
         {error ? (
           <View style={styles.errorContainer}>
@@ -233,7 +279,7 @@ export default function ProfileSetupScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFBFC',
+    backgroundColor: '#FFF9E6',
   },
   scrollContent: {
     paddingBottom: 100,
@@ -241,8 +287,15 @@ const styles = StyleSheet.create({
   header: {
     margin: 24,
     marginBottom: 16,
-    borderRadius: 16,
+    borderRadius: 20,
     backgroundColor: '#FFFFFF',
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    shadowColor: '#8B0000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
   },
   headerContent: {
     flexDirection: 'row',
@@ -255,8 +308,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: '700',
-    color: '#2C3E50',
+    color: '#8B0000',
     marginBottom: 4,
+    fontSize: 24,
+    textShadowColor: 'rgba(255, 215, 0, 0.3)',
+    textShadowOffset: {width: 0, height: 2},
+    textShadowRadius: 4,
   },
   subtitle: {
     color: '#6C757D',
@@ -264,14 +321,22 @@ const styles = StyleSheet.create({
   photoSection: {
     marginHorizontal: 24,
     marginBottom: 16,
-    borderRadius: 16,
+    borderRadius: 20,
     backgroundColor: '#FFFFFF',
     padding: 20,
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    shadowColor: '#8B0000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
   },
   sectionTitle: {
     fontWeight: '600',
-    color: '#2C3E50',
+    color: '#8B0000',
     marginBottom: 16,
+    fontSize: 18,
   },
   photoContainer: {
     alignItems: 'center',
@@ -285,11 +350,11 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#FFF9E6',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: '#E9ECEF',
+    borderWidth: 3,
+    borderColor: '#FFD700',
     borderStyle: 'dashed',
   },
   photoText: {
@@ -299,9 +364,16 @@ const styles = StyleSheet.create({
   detailsSection: {
     marginHorizontal: 24,
     marginBottom: 16,
-    borderRadius: 16,
+    borderRadius: 20,
     backgroundColor: '#FFFFFF',
     padding: 20,
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    shadowColor: '#8B0000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
   },
   inputRow: {
     flexDirection: 'row',
@@ -329,6 +401,50 @@ const styles = StyleSheet.create({
   saveButton: {
     marginHorizontal: 24,
     marginTop: 16,
+    backgroundColor: '#8B0000',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    shadowColor: '#8B0000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  sectionSubtitle: {
+    color: '#6C757D',
+    marginBottom: 16,
+    fontSize: 13,
+  },
+  interestsChips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  interestChip: {
+    backgroundColor: '#FFFFFF',
+    marginBottom: 4,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  selectedInterestChip: {
+    backgroundColor: '#8B0000',
+    borderColor: '#FFD700',
+    borderWidth: 2,
+  },
+  interestChipText: {
+    color: '#6C757D',
+    fontSize: 12,
+  },
+  selectedInterestChipText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  interestsCount: {
+    marginTop: 12,
+    color: '#8B0000',
+    fontWeight: '500',
+    textAlign: 'center',
   },
 });
 

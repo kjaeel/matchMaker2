@@ -39,7 +39,7 @@ export default function ProfileCard({ profile, liked, onLike, onPress }) {
             <Icon
               name={liked ? 'heart' : 'heart-outline'}
                          size={24}
-                         color={liked ? '#FFFFFF' : '#FF6B6B'}
+                         color={liked ? '#FFFFFF' : '#8B0000'}
                        />
               </TouchableOpacity>
             </View>
@@ -126,14 +126,16 @@ const styles = StyleSheet.create({
   card: {
     marginVertical: 8,
     marginHorizontal: 16,
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowColor: '#8B0000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 10,
     backgroundColor: '#FFFFFF',
+    borderWidth: 1.5,
+    borderColor: '#FFD700',
   },
   imageBackground: {
     height: 200,
@@ -162,10 +164,14 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   avatar: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: '#8B0000',
+    borderWidth: 2,
+    borderColor: '#FFD700',
   },
   avatarFallback: {
-    backgroundColor: '#4ECDC4',
+    backgroundColor: '#DC143C',
+    borderWidth: 2,
+    borderColor: '#FFD700',
   },
   avatarLabel: {
     color: '#FFFFFF',
@@ -185,7 +191,9 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   likedButton: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: '#8B0000',
+    borderWidth: 2,
+    borderColor: '#FFD700',
   },
   content: {
     padding: 24,
@@ -201,7 +209,7 @@ const styles = StyleSheet.create({
     color: '#2C3E50',
   },
   age: {
-    color: '#FF6B6B',
+    color: '#8B0000',
     fontWeight: '600',
   },
   locationContainer: {
@@ -221,11 +229,13 @@ const styles = StyleSheet.create({
   chip: {
     marginRight: 8,
     marginBottom: 4,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#FFF9E6',
+    borderWidth: 1,
+    borderColor: '#FFD700',
   },
   chipText: {
-    color: '#FF6B6B',
-    fontWeight: '500',
+    color: '#8B0000',
+    fontWeight: '600',
   },
   detailsContainer: {
     gap: 8,

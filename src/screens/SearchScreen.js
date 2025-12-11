@@ -158,7 +158,7 @@ export default function SearchScreen({ navigation }) {
         <Icon
           name="magnify"
           size={32}
-          color="#FF6B6B"
+          color="#8B0000"
         />
         <View style={styles.headerText}>
           <Text variant="headlineMedium" style={styles.title}>
@@ -184,7 +184,7 @@ export default function SearchScreen({ navigation }) {
   const renderFilters = () => (
     <Surface style={styles.filtersContainer} elevation={1}>
       <View style={styles.filtersHeader}>
-        <Icon name="filter-variant" size={20} color="#FF6B6B" />
+        <Icon name="filter-variant" size={20} color="#8B0000" />
         <Text variant="titleMedium" style={styles.filtersTitle}>Search Filters</Text>
       </View>
       
@@ -284,7 +284,7 @@ export default function SearchScreen({ navigation }) {
     <View style={styles.emptyState}>
       {loading ? (
         <>
-          <ActivityIndicator size="large" color="#FF6B6B" />
+          <ActivityIndicator size="large" color="#8B0000" />
           <Text variant="bodyLarge" style={styles.emptySubtitle}>
             Searching...
           </Text>
@@ -351,7 +351,7 @@ export default function SearchScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFBFC',
+    backgroundColor: '#FFF9E6',
   },
   listContent: {
     paddingBottom: 100,
@@ -359,8 +359,15 @@ const styles = StyleSheet.create({
   header: {
     margin: 24,
     marginBottom: 16,
-    borderRadius: 16,
+    borderRadius: 20,
     backgroundColor: '#FFFFFF',
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    shadowColor: '#8B0000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
   },
   headerContent: {
     flexDirection: 'row',
@@ -373,8 +380,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: '700',
-    color: '#2C3E50',
+    color: '#8B0000',
     marginBottom: 4,
+    fontSize: 24,
+    textShadowColor: 'rgba(255, 215, 0, 0.3)',
+    textShadowOffset: {width: 0, height: 2},
+    textShadowRadius: 4,
   },
   subtitle: {
     color: '#6C757D',
@@ -389,9 +400,16 @@ const styles = StyleSheet.create({
            marginHorizontal: 24,
            marginTop: 0,
            marginBottom: 16,
-           borderRadius: 16,
+           borderRadius: 20,
            backgroundColor: '#FFFFFF',
            maxHeight: 500,
+           borderWidth: 2,
+           borderColor: '#FFD700',
+           shadowColor: '#8B0000',
+           shadowOffset: { width: 0, height: 4 },
+           shadowOpacity: 0.25,
+           shadowRadius: 8,
+           elevation: 8,
          },
   filtersHeader: {
     flexDirection: 'row',

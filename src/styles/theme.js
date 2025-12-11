@@ -2,20 +2,20 @@
 import { MD3LightTheme } from 'react-native-paper';
 
 export const colors = {
-  // Primary colors
-  primary: '#FF6B6B', // Coral red for love/hearts
-  primaryLight: '#FF8E8E',
-  primaryDark: '#E55555',
+  // Primary colors - Indian arranged marriage theme
+  primary: '#8B0000', // Deep red/maroon
+  primaryLight: '#DC143C', // Crimson
+  primaryDark: '#5A0000', // Darker maroon
   
   // Secondary colors
-  secondary: '#4ECDC4', // Teal for balance
-  secondaryLight: '#7EDDD6',
-  secondaryDark: '#3BA89F',
+  secondary: '#FFD700', // Gold
+  secondaryLight: '#FFA500', // Orange
+  secondaryDark: '#B8860B', // Dark goldenrod
   
   // Accent colors
-  accent: '#FFE66D', // Yellow for highlights
-  accentLight: '#FFF2A1',
-  accentDark: '#E6D15A',
+  accent: '#FF6347', // Tomato red
+  accentLight: '#FF8C69', // Light salmon
+  accentDark: '#DC143C', // Crimson
   
   // Neutral colors
   white: '#FFFFFF',
@@ -52,12 +52,12 @@ export const colors = {
     inverse: '#FFFFFF',
   },
   
-  // Gradient colors
+  // Gradient colors - Indian arranged marriage theme
   gradients: {
-    primary: ['#FF6B6B', '#FF8E8E'],
-    secondary: ['#4ECDC4', '#7EDDD6'],
-    sunset: ['#FF6B6B', '#FFE66D'],
-    ocean: ['#4ECDC4', '#45B7B8'],
+    primary: ['#8B0000', '#DC143C', '#FF6347', '#FFD700'],
+    secondary: ['#FFD700', '#FFA500', '#FF6347'],
+    sunset: ['#8B0000', '#DC143C', '#FF6347'],
+    ocean: ['#FFD700', '#FFA500'],
   }
 };
 
