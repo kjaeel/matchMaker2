@@ -29,7 +29,7 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error('API Error:', error.response?.data || error.message);
+    console.error('API Error:', error);
     return Promise.reject(error);
   }
 );
@@ -66,6 +66,7 @@ export const userAPI = {
   getAllUsers: async () => {
     try {
       const response = await apiClient.get('/api/users');
+      console.log(response)
       return { success: true, data: response.data };
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Failed to fetch users';

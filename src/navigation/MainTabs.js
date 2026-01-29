@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import MatchesScreen from '../screens/MatchesScreen';
-import ChatScreen from '../screens/ChatScreen';
+import ChatListScreen from '../screens/ChatListScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -84,7 +84,7 @@ export default function MainTabs() {
       />
       <Tab.Screen
         name="Chat"
-        component={ChatScreen}
+        component={ChatListScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
             <Icon 

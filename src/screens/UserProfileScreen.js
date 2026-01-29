@@ -3,6 +3,7 @@ import { View, Image, StyleSheet, ScrollView } from 'react-native';
 import { Button, Divider, List, Text, Surface, Chip, FAB, ActivityIndicator } from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
 import { userAPI } from '../services/api';
+import { findOrCreateConversation } from '../services/firebase';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function UserProfileScreen({ route, navigation }) {
@@ -10,6 +11,7 @@ export default function UserProfileScreen({ route, navigation }) {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [startingChat, setStartingChat] = useState(false);
   
   // Check if we're viewing another user's profile or our own
   const profile = route?.params?.profile;
@@ -75,6 +77,39 @@ export default function UserProfileScreen({ route, navigation }) {
       age--;
     }
     return age;
+  };
+
+  // Handle starting a chat with the profile user
+  const handleStartChat = async () => {
+    if (!user?.id || !profileData?.id) {
+      console.error('Cannot start chat: Missing user IDs');
+      return;
+    }
+
+    setStartingChat(true);
+    try {
+      // Find or create conversation
+      const result = await findOrCreateConversation(user.id, profileData.id);
+      
+      if (result.success) {
+        // Navigate to individual chat screen
+        navigation.navigate('IndividualChat', {
+          chatId: result.data.conversationId,
+          otherUserId: profileData.id,
+          otherUserName: profileData.name || profileData.fullName || 'User',
+        });
+      } else {
+        // Show error
+        setError(result.error || 'Failed to start conversation');
+        setTimeout(() => setError(null), 3000);
+      }
+    } catch (error) {
+      console.error('Error starting chat:', error);
+      setError(error.message || 'Failed to start conversation');
+      setTimeout(() => setError(null), 3000);
+    } finally {
+      setStartingChat(false);
+    }
   };
 
   if (!profileData) {
@@ -156,11 +191,13 @@ export default function UserProfileScreen({ route, navigation }) {
           </Button>
           <Button
             mode="contained"
-            onPress={() => navigation.navigate('Chat')}
+            onPress={handleStartChat}
             style={styles.actionButton}
             icon="chat"
+            loading={startingChat}
+            disabled={startingChat}
           >
-            Message
+            {startingChat ? 'Starting...' : 'Message'}
           </Button>
         </View>
       )}

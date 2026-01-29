@@ -27,7 +27,7 @@ export default function HomeScreen({ navigation }) {
         // Transform API data to match our expected format
         const transformedProfiles = result.data.map(user => ({
           id: user.id,
-          name: user.fullName,
+          name: user.name,
           age: user.age || calculateAge(user.dateOfBirth),
           gender: user.gender,
           religion: user.religion || 'Not specified',
@@ -40,14 +40,17 @@ export default function HomeScreen({ navigation }) {
           heightCm: user.heightCm || 0,
           photo: user.photoUri || 'https://randomuser.me/api/portraits/men/1.jpg',
         }));
-        setProfiles(transformedProfiles);
+        // setProfiles(transformedProfiles); -------------------------------------
+        setProfiles(mockProfiles);
+
+        console.log("transformedProfiles",transformedProfiles)
       } else {
-        setError(result.error);
+        setError("------",result);
         // Fallback to mock data if API fails
         setProfiles(mockProfiles);
       }
     } catch (err) {
-      setError(err.message);
+      setError("------",err);
       // Fallback to mock data if API fails
       setProfiles(mockProfiles);
     } finally {

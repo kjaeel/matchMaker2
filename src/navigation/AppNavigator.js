@@ -5,6 +5,7 @@ import MainTabs from './MainTabs';
 import { AuthContext } from '../context/AuthContext';
 import ProfileSetupScreen from '../screens/ProfileSetupScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
+import IndividualChatScreen from '../screens/IndividualChatScreen';
 import { ActivityIndicator } from 'react-native-paper';
 import { View } from 'react-native';
 
@@ -51,6 +52,20 @@ export default function AppNavigator() {
           title: 'Profile Details',
           headerStyle: {
             backgroundColor: '#FF6B6B',
+          },
+          headerTintColor: '#FFFFFF',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="IndividualChat"
+        component={IndividualChatScreen}
+        options={{ 
+          title: 'Chat',
+          headerStyle: {
+            backgroundColor: '#7b2cbf',
           },
           headerTintColor: '#FFFFFF',
           headerTitleStyle: {
