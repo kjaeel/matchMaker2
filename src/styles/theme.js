@@ -2,62 +2,76 @@
 import { MD3LightTheme } from 'react-native-paper';
 
 export const colors = {
-  // Primary colors
-  primary: '#FF6B6B', // Coral red for love/hearts
-  primaryLight: '#FF8E8E',
-  primaryDark: '#E55555',
+  // Primary colors - Deep Traditional Wedding Red/Maroon
+  primary: '#8B0000', // Deep burgundy red (very traditional)
+  primaryLight: '#B22222',
+  primaryDark: '#5C0000',
   
-  // Secondary colors
-  secondary: '#4ECDC4', // Teal for balance
-  secondaryLight: '#7EDDD6',
-  secondaryDark: '#3BA89F',
+  // Secondary colors - Rich Gold (Traditional Wedding Gold)
+  secondary: '#DAA520', // Goldenrod - traditional Indian gold
+  secondaryLight: '#FFD700',
+  secondaryDark: '#B8860B',
   
-  // Accent colors
-  accent: '#FFE66D', // Yellow for highlights
-  accentLight: '#FFF2A1',
-  accentDark: '#E6D15A',
+  // Accent colors - Saffron & Deep Maroon
+  accent: '#FF8C00', // Saffron orange
+  accentLight: '#FFA500',
+  accentDark: '#FF7F00',
   
-  // Neutral colors
+  // Traditional Indian Wedding colors
+  maroon: '#722F37', // Deep traditional maroon
+  maroonLight: '#8B3A42',
+  maroonDark: '#4A1F24',
+  
+  // Neutral colors - Rich cream and ivory
   white: '#FFFFFF',
-  black: '#2C3E50',
+  black: '#1A1A1A',
+  cream: '#FFF5E6', // Rich ivory/cream
+  creamLight: '#FFFBF0',
+  creamDark: '#F5E6D3',
+  ivory: '#FFFFF0',
+  
   gray: {
-    50: '#F8F9FA',
-    100: '#E9ECEF',
-    200: '#DEE2E6',
-    300: '#CED4DA',
-    400: '#ADB5BD',
-    500: '#6C757D',
-    600: '#495057',
-    700: '#343A40',
-    800: '#212529',
-    900: '#1A1D20',
+    50: '#F9F7F4',
+    100: '#F0EDE8',
+    200: '#E5E0D8',
+    300: '#D4CEC4',
+    400: '#B8B0A5',
+    500: '#8B8276',
+    600: '#6B6258',
+    700: '#4A433C',
+    800: '#2F2A25',
+    900: '#1A1815',
   },
   
-  // Status colors
-  success: '#28A745',
-  warning: '#FFC107',
-  error: '#DC3545',
-  info: '#17A2B8',
+  // Status colors with Indian theme
+  success: '#22C55E', // Green for prosperity
+  warning: '#F59E0B', // Amber
+  error: '#DC2626', // Deep red
+  info: '#3B82F6',
   
-  // Background colors
-  background: '#FAFBFC',
+  // Background colors - Rich traditional tones
+  background: '#FFF5E6', // Rich ivory background
   surface: '#FFFFFF',
-  surfaceVariant: '#F8F9FA',
+  surfaceVariant: '#FFFBF0',
+  surfaceGold: '#FFF8DC', // Gold-tinted surface
   
   // Text colors
   text: {
-    primary: '#2C3E50',
-    secondary: '#6C757D',
-    disabled: '#ADB5BD',
+    primary: '#1A1815', // Deep brown-black
+    secondary: '#6B6258',
+    disabled: '#B8B0A5',
     inverse: '#FFFFFF',
   },
   
-  // Gradient colors
+  // Gradient colors - Traditional Indian Wedding gradients
   gradients: {
-    primary: ['#FF6B6B', '#FF8E8E'],
-    secondary: ['#4ECDC4', '#7EDDD6'],
-    sunset: ['#FF6B6B', '#FFE66D'],
-    ocean: ['#4ECDC4', '#45B7B8'],
+    primary: ['#8B0000', '#B22222'], // Deep red gradient
+    secondary: ['#DAA520', '#FFD700'], // Rich gold gradient
+    auspicious: ['#8B0000', '#DAA520'], // Deep red to Gold (most auspicious)
+    wedding: ['#722F37', '#8B0000'], // Maroon to Deep Red
+    prosperity: ['#DAA520', '#FF8C00'], // Gold to Saffron
+    traditional: ['#5C0000', '#722F37'], // Deep burgundy to maroon
+    royal: ['#8B0000', '#DAA520', '#FFD700'], // Royal wedding gradient
   }
 };
 
@@ -168,7 +182,7 @@ export const theme = {
     background: colors.background,
     error: colors.error,
     onPrimary: colors.white,
-    onSecondary: colors.white,
+    onSecondary: colors.black,
     onSurface: colors.text.primary,
     onBackground: colors.text.primary,
     outline: colors.gray[300],

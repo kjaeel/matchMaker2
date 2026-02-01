@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import { mockProfiles } from '../data/mockProfiles';
 import ProfileCard from '../components/ProfileCard';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { colors } from '../styles/theme';
 
 export default function MatchesScreen({ navigation }) {
   const { likedProfileIds, toggleLike } = useContext(AuthContext);
@@ -15,13 +16,15 @@ export default function MatchesScreen({ navigation }) {
   );
 
   const renderHeader = () => (
-    <Surface style={styles.header} elevation={2}>
+    <Surface style={styles.header} elevation={3}>
       <View style={styles.headerContent}>
-        <Icon 
-          name="heart" 
-          size={32} 
-          color="#FF6B6B" 
-        />
+        <View style={[styles.iconContainer, { backgroundColor: colors.primary + '15' }]}>
+          <Icon 
+            name="heart" 
+            size={32} 
+            color={colors.primary} 
+          />
+        </View>
         <View style={styles.headerText}>
           <Text variant="headlineMedium" style={styles.title}>
             Your Matches
@@ -36,11 +39,13 @@ export default function MatchesScreen({ navigation }) {
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <Icon 
-        name="heart-outline" 
-        size={80} 
-        color="#ADB5BD" 
-      />
+      <View style={[styles.emptyIconContainer, { backgroundColor: colors.primary + '15' }]}>
+        <Icon 
+          name="heart-outline" 
+          size={64} 
+          color={colors.primary} 
+        />
+      </View>
       <Text variant="headlineSmall" style={styles.emptyTitle}>
         No matches yet
       </Text>
@@ -74,6 +79,7 @@ export default function MatchesScreen({ navigation }) {
         style={styles.fab}
         onPress={() => navigation.navigate('Home')}
         label="Find More"
+        color={colors.white}
       />
     </View>
   );
@@ -82,7 +88,7 @@ export default function MatchesScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFBFC',
+    backgroundColor: colors.background,
   },
   listContent: {
     paddingBottom: 100,
@@ -90,25 +96,37 @@ const styles = StyleSheet.create({
   header: {
     margin: 24,
     marginBottom: 16,
-    borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.gray[100],
   },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 24,
   },
+  iconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
   headerText: {
-    marginLeft: 16,
     flex: 1,
   },
   title: {
     fontWeight: '700',
-    color: '#2C3E50',
+    color: colors.text.primary,
     marginBottom: 4,
+    fontSize: 22,
+    letterSpacing: 0.3,
   },
   subtitle: {
-    color: '#6C757D',
+    color: colors.text.secondary,
+    fontSize: 15,
   },
   emptyState: {
     flex: 1,
@@ -117,24 +135,40 @@ const styles = StyleSheet.create({
     padding: 48,
     marginTop: 64,
   },
+  emptyIconContainer: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
   emptyTitle: {
     fontWeight: '700',
-    color: '#2C3E50',
-    marginTop: 24,
+    color: colors.text.primary,
+    marginTop: 16,
     marginBottom: 8,
     textAlign: 'center',
+    fontSize: 20,
   },
   emptySubtitle: {
-    color: '#6C757D',
+    color: colors.text.secondary,
     textAlign: 'center',
-    lineHeight: 1.6 * 18,
+    lineHeight: 1.6 * 16,
+    fontSize: 15,
   },
   fab: {
     position: 'absolute',
     margin: 24,
     right: 0,
     bottom: 0,
-    backgroundColor: '#FF6B6B',
+    backgroundColor: colors.primary,
+    borderRadius: 28,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
 });
 

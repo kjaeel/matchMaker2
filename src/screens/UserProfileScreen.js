@@ -3,15 +3,14 @@ import { View, Image, StyleSheet, ScrollView } from 'react-native';
 import { Button, Divider, List, Text, Surface, Chip, FAB, ActivityIndicator } from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
 import { userAPI } from '../services/api';
-import { findOrCreateConversation } from '../services/firebase';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { colors } from '../styles/theme';
 
 export default function UserProfileScreen({ route, navigation }) {
   const { user, logout, likedProfileIds, toggleLike } = useContext(AuthContext);
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [startingChat, setStartingChat] = useState(false);
   
   // Check if we're viewing another user's profile or our own
   const profile = route?.params?.profile;
@@ -79,43 +78,10 @@ export default function UserProfileScreen({ route, navigation }) {
     return age;
   };
 
-  // Handle starting a chat with the profile user
-  const handleStartChat = async () => {
-    if (!user?.id || !profileData?.id) {
-      console.error('Cannot start chat: Missing user IDs');
-      return;
-    }
-
-    setStartingChat(true);
-    try {
-      // Find or create conversation
-      const result = await findOrCreateConversation(user.id, profileData.id);
-      
-      if (result.success) {
-        // Navigate to individual chat screen
-        navigation.navigate('IndividualChat', {
-          chatId: result.data.conversationId,
-          otherUserId: profileData.id,
-          otherUserName: profileData.name || profileData.fullName || 'User',
-        });
-      } else {
-        // Show error
-        setError(result.error || 'Failed to start conversation');
-        setTimeout(() => setError(null), 3000);
-      }
-    } catch (error) {
-      console.error('Error starting chat:', error);
-      setError(error.message || 'Failed to start conversation');
-      setTimeout(() => setError(null), 3000);
-    } finally {
-      setStartingChat(false);
-    }
-  };
-
   if (!profileData) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF6B6B" />
+        <ActivityIndicator size="large" color={colors.primary} />
         <Text variant="bodyLarge" style={styles.loadingText}>
           Loading profile...
         </Text>
@@ -127,7 +93,7 @@ export default function UserProfileScreen({ route, navigation }) {
   if (error && !profileData) {
     return (
       <View style={styles.loadingContainer}>
-        <Icon name="alert-circle-outline" size={80} color="#DC3545" />
+        <Icon name="alert-circle-outline" size={80} color={colors.error} />
         <Text variant="headlineSmall" style={styles.emptyTitle}>
           Error Loading Profile
         </Text>
@@ -139,150 +105,191 @@ export default function UserProfileScreen({ route, navigation }) {
   }
 
   const renderProfileHeader = () => (
-    <Surface style={styles.header} elevation={4}>
-      <View style={styles.headerContent}>
-        <View style={styles.avatarContainer}>
-          {profileData.photo ? (
-            <Image 
-              source={{ uri: profileData.photo }} 
-              style={styles.avatar} 
-            />
-          ) : (
-            <View style={[styles.avatar, styles.avatarFallback]}>
-              <Icon 
-                name="account" 
-                size={40} 
-                color="#FFFFFF" 
+    <View style={styles.headerWrapper}>
+      <View style={styles.ornateTopBorder}>
+        <View style={styles.patternDot} />
+        <View style={styles.patternDot} />
+        <View style={styles.patternDot} />
+      </View>
+      <Surface style={styles.header} elevation={6}>
+        <View style={styles.headerContent}>
+          <View style={styles.avatarContainer}>
+            <View style={styles.avatarRing} />
+            {profileData.photo ? (
+              <Image 
+                source={{ uri: profileData.photo }} 
+                style={styles.avatar} 
               />
-            </View>
-          )}
-        </View>
-        
-        <View style={styles.nameContainer}>
-          <Text variant="headlineMedium" style={styles.name}>
-            {profileData.name || profileData.fullName}
-          </Text>
-          <Text variant="bodyLarge" style={styles.age}>
-            {profileData.age} years old
-          </Text>
-          <View style={styles.locationContainer}>
-            <Icon 
-              name="map-marker" 
-              size={16} 
-              color="#6C757D" 
-            />
-            <Text variant="bodyMedium" style={styles.location}>
-              {profileData.city}, {profileData.state}
+            ) : (
+              <View style={[styles.avatar, styles.avatarFallback]}>
+                <Icon 
+                  name="account" 
+                  size={50} 
+                  color={colors.white} 
+                />
+              </View>
+            )}
+            <View style={styles.avatarGlow} />
+          </View>
+          
+          <View style={styles.nameContainer}>
+            <View style={styles.titleUnderline} />
+            <Text variant="headlineMedium" style={styles.name}>
+              {profileData.name || profileData.fullName}
             </Text>
+            <Text variant="bodyLarge" style={styles.age}>
+              {profileData.age} years old
+            </Text>
+            <View style={styles.locationContainer}>
+              <Icon 
+                name="map-marker" 
+                size={18} 
+                color={colors.primary} 
+              />
+              <Text variant="bodyMedium" style={styles.location}>
+                {profileData.city}, {profileData.state}
+              </Text>
+            </View>
+            <View style={styles.titleUnderline} />
           </View>
         </View>
+        
+        {isViewingOtherProfile && (
+          <View style={styles.actionButtons}>
+            <Button
+              mode="outlined"
+              onPress={() => toggleLike(profileData.id)}
+              style={[styles.actionButton, isLiked && styles.likedButton]}
+              labelStyle={[styles.actionButtonText, isLiked && styles.likedButtonText]}
+              icon={isLiked ? "heart" : "heart-outline"}
+            >
+              {isLiked ? 'Liked' : 'Like'}
+            </Button>
+            <Button
+              mode="contained"
+              onPress={() => navigation.navigate('Chat')}
+              style={styles.actionButton}
+              icon="chat"
+            >
+              Message
+            </Button>
+          </View>
+        )}
+      </Surface>
+      <View style={styles.ornateBottomBorder}>
+        <View style={styles.patternDot} />
+        <View style={styles.patternDot} />
+        <View style={styles.patternDot} />
       </View>
-      
-      {isViewingOtherProfile && (
-        <View style={styles.actionButtons}>
-          <Button
-            mode="outlined"
-            onPress={() => toggleLike(profileData.id)}
-            style={[styles.actionButton, isLiked && styles.likedButton]}
-            labelStyle={[styles.actionButtonText, isLiked && styles.likedButtonText]}
-            icon={isLiked ? "heart" : "heart-outline"}
-          >
-            {isLiked ? 'Liked' : 'Like'}
-          </Button>
-          <Button
-            mode="contained"
-            onPress={handleStartChat}
-            style={styles.actionButton}
-            icon="chat"
-            loading={startingChat}
-            disabled={startingChat}
-          >
-            {startingChat ? 'Starting...' : 'Message'}
-          </Button>
-        </View>
-      )}
-    </Surface>
+    </View>
   );
 
   const renderProfileDetails = () => (
-    <Surface style={styles.detailsContainer} elevation={2}>
-      <Text variant="titleLarge" style={styles.sectionTitle}>About</Text>
-      
-      <View style={styles.chipsContainer}>
-        <Chip 
-          mode="outlined" 
-          style={styles.chip}
-          textStyle={styles.chipText}
-        >
-          {profileData.religion}
-        </Chip>
-        <Chip 
-          mode="outlined" 
-          style={styles.chip}
-          textStyle={styles.chipText}
-        >
-          {profileData.caste}
-        </Chip>
+    <View style={styles.detailsWrapper}>
+      <View style={styles.ornateTopBorder}>
+        <View style={styles.patternDot} />
+        <View style={styles.patternDot} />
+        <View style={styles.patternDot} />
       </View>
-
-      <View style={styles.detailsList}>
-        <View style={styles.detailRow}>
-          <Icon 
-            name="school" 
-            size={20} 
-            color="#FF6B6B" 
-          />
-          <View style={styles.detailContent}>
-            <Text variant="bodySmall" style={styles.detailLabel}>Education</Text>
-            <Text variant="bodyMedium" style={styles.detailValue}>
-              {profileData.education}
-            </Text>
-          </View>
+      <Surface style={styles.detailsContainer} elevation={4}>
+        <View style={styles.decorativeDivider}>
+          <View style={styles.dividerDot} />
+          <View style={styles.dividerLine} />
+          <Icon name="flower" size={16} color={colors.secondary} />
+          <View style={styles.dividerLine} />
+          <View style={styles.dividerDot} />
+        </View>
+        <Text variant="titleLarge" style={styles.sectionTitle}>About</Text>
+        
+        <View style={styles.chipsContainer}>
+          <Chip 
+            mode="outlined" 
+            style={styles.chip}
+            textStyle={styles.chipText}
+          >
+            {profileData.religion}
+          </Chip>
+          <Chip 
+            mode="outlined" 
+            style={styles.chip}
+            textStyle={styles.chipText}
+          >
+            {profileData.caste}
+          </Chip>
         </View>
 
-        <View style={styles.detailRow}>
-          <Icon 
-            name="briefcase" 
-            size={20} 
-            color="#FF6B6B" 
-          />
-          <View style={styles.detailContent}>
-            <Text variant="bodySmall" style={styles.detailLabel}>Occupation</Text>
-            <Text variant="bodyMedium" style={styles.detailValue}>
-              {profileData.occupation}
-            </Text>
+        <View style={styles.detailsList}>
+          <View style={styles.detailRow}>
+            <View style={styles.iconWrapper}>
+              <Icon 
+                name="school" 
+                size={20} 
+                color={colors.secondary} 
+              />
+            </View>
+            <View style={styles.detailContent}>
+              <Text variant="bodySmall" style={styles.detailLabel}>Education</Text>
+              <Text variant="bodyMedium" style={styles.detailValue}>
+                {profileData.education}
+              </Text>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.detailRow}>
-          <Icon 
-            name="human-male-height" 
-            size={20} 
-            color="#FF6B6B" 
-          />
-          <View style={styles.detailContent}>
-            <Text variant="bodySmall" style={styles.detailLabel}>Height</Text>
-            <Text variant="bodyMedium" style={styles.detailValue}>
-              {profileData.heightCm} cm
-            </Text>
+          <View style={styles.detailRow}>
+            <View style={styles.iconWrapper}>
+              <Icon 
+                name="briefcase" 
+                size={20} 
+                color={colors.secondary} 
+              />
+            </View>
+            <View style={styles.detailContent}>
+              <Text variant="bodySmall" style={styles.detailLabel}>Occupation</Text>
+              <Text variant="bodyMedium" style={styles.detailValue}>
+                {profileData.occupation}
+              </Text>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.detailRow}>
-          <Icon 
-            name="flag" 
-            size={20} 
-            color="#FF6B6B" 
-          />
-          <View style={styles.detailContent}>
-            <Text variant="bodySmall" style={styles.detailLabel}>Country</Text>
-            <Text variant="bodyMedium" style={styles.detailValue}>
-              {profileData.country}
-            </Text>
+          <View style={styles.detailRow}>
+            <View style={styles.iconWrapper}>
+              <Icon 
+                name="human-male-height" 
+                size={20} 
+                color={colors.secondary} 
+              />
+            </View>
+            <View style={styles.detailContent}>
+              <Text variant="bodySmall" style={styles.detailLabel}>Height</Text>
+              <Text variant="bodyMedium" style={styles.detailValue}>
+                {profileData.heightCm} cm
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.detailRow}>
+            <View style={styles.iconWrapper}>
+              <Icon 
+                name="flag" 
+                size={20} 
+                color={colors.secondary} 
+              />
+            </View>
+            <View style={styles.detailContent}>
+              <Text variant="bodySmall" style={styles.detailLabel}>Country</Text>
+              <Text variant="bodyMedium" style={styles.detailValue}>
+                {profileData.country}
+              </Text>
+            </View>
           </View>
         </View>
+      </Surface>
+      <View style={styles.ornateBottomBorder}>
+        <View style={styles.patternDot} />
+        <View style={styles.patternDot} />
+        <View style={styles.patternDot} />
       </View>
-    </Surface>
+    </View>
   );
 
   return (
@@ -310,146 +317,288 @@ export default function UserProfileScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFBFC',
+    backgroundColor: colors.background,
   },
   scrollContent: {
     paddingBottom: 100,
   },
+  headerWrapper: {
+    margin: 12,
+    marginBottom: 16,
+  },
+  ornateTopBorder: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 8,
+    backgroundColor: colors.secondary,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingHorizontal: 4,
+  },
+  ornateBottomBorder: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 8,
+    backgroundColor: colors.secondary,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    paddingHorizontal: 4,
+  },
+  patternDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: colors.primary,
+  },
   header: {
-    margin: 16,
-    borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    borderRadius: 0,
+    backgroundColor: colors.surfaceGold,
+    borderWidth: 4,
+    borderColor: colors.secondary,
   },
   headerContent: {
     padding: 24,
     alignItems: 'center',
   },
   avatarContainer: {
-    marginBottom: 16,
+    marginBottom: 18,
+    position: 'relative',
+  },
+  avatarRing: {
+    position: 'absolute',
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    borderWidth: 4,
+    borderColor: colors.secondary,
+    top: -5,
+    left: -5,
+  },
+  avatarGlow: {
+    position: 'absolute',
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    backgroundColor: colors.secondary,
+    opacity: 0.2,
+    top: -3,
+    left: -3,
   },
   avatar: {
     width: 120,
     height: 120,
     borderRadius: 60,
+    borderWidth: 3,
+    borderColor: colors.white,
   },
   avatarFallback: {
-    backgroundColor: '#4ECDC4',
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 3,
+    borderColor: colors.white,
   },
   nameContainer: {
     alignItems: 'center',
+    width: '100%',
+  },
+  titleUnderline: {
+    width: 50,
+    height: 3,
+    backgroundColor: colors.secondary,
+    marginVertical: 6,
+    borderRadius: 2,
   },
   name: {
-    fontWeight: '700',
-    color: '#2C3E50',
-    marginBottom: 4,
+    fontWeight: '800',
+    color: colors.primary,
+    marginBottom: 6,
     textAlign: 'center',
+    fontSize: 24,
+    letterSpacing: 0.5,
+    textShadowColor: colors.secondary + '50',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   age: {
-    color: '#FF6B6B',
-    fontWeight: '600',
-    marginBottom: 8,
+    color: colors.secondary,
+    fontWeight: '700',
+    marginBottom: 10,
+    fontSize: 16,
+    backgroundColor: colors.primary + '15',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.secondary + '40',
   },
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: colors.primary + '10',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: colors.secondary + '30',
+    marginTop: 8,
   },
   location: {
-    marginLeft: 4,
-    color: '#6C757D',
+    marginLeft: 6,
+    color: colors.primary,
+    fontWeight: '600',
+    fontSize: 14,
   },
   actionButtons: {
     flexDirection: 'row',
-    padding: 16,
+    padding: 18,
     paddingTop: 0,
     gap: 12,
   },
   actionButton: {
     flex: 1,
-    borderColor: '#FF6B6B',
+    borderColor: colors.secondary,
+    borderWidth: 2,
+    borderRadius: 20,
   },
   likedButton: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: colors.primary,
+    borderColor: colors.secondary,
+    borderWidth: 3,
   },
   actionButtonText: {
-    color: '#FF6B6B',
+    color: colors.primary,
+    fontWeight: '600',
   },
   likedButtonText: {
-    color: '#FFFFFF',
+    color: colors.white,
+    fontWeight: '700',
+  },
+  detailsWrapper: {
+    margin: 12,
+    marginTop: 0,
   },
   detailsContainer: {
-    margin: 16,
-    marginTop: 0,
-    borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    borderRadius: 0,
+    backgroundColor: colors.surfaceGold,
     padding: 20,
+    borderWidth: 4,
+    borderColor: colors.secondary,
+  },
+  decorativeDivider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+    paddingHorizontal: 8,
+  },
+  dividerDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: colors.secondary,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 2,
+    backgroundColor: colors.secondary + '60',
+    marginHorizontal: 8,
   },
   sectionTitle: {
-    fontWeight: '700',
-    color: '#2C3E50',
-    marginBottom: 16,
+    fontWeight: '800',
+    color: colors.primary,
+    marginBottom: 18,
+    fontSize: 22,
+    letterSpacing: 0.5,
+    textAlign: 'center',
   },
   chipsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: 20,
-    gap: 8,
+    gap: 10,
+    justifyContent: 'center',
   },
   chip: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.secondary + '20',
+    borderColor: colors.secondary,
+    borderWidth: 2,
+    borderRadius: 16,
   },
   chipText: {
-    color: '#FF6B6B',
-    fontWeight: '500',
+    color: colors.primary,
+    fontWeight: '700',
+    fontSize: 13,
   },
   detailsList: {
-    gap: 16,
+    gap: 14,
+    paddingTop: 8,
+    borderTopWidth: 2,
+    borderTopColor: colors.secondary + '40',
+    borderStyle: 'dashed',
   },
   detailRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 4,
+  },
+  iconWrapper: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+    borderWidth: 2,
+    borderColor: colors.secondary,
   },
   detailContent: {
-    marginLeft: 12,
     flex: 1,
   },
   detailLabel: {
-    color: '#6C757D',
-    fontWeight: '500',
-    marginBottom: 2,
-    alignItems: 'center'
+    color: colors.text.secondary,
+    fontWeight: '600',
+    marginBottom: 4,
+    fontSize: 12,
   },
   detailValue: {
-    color: '#2C3E50',
-    fontWeight: '600',
+    color: colors.primary,
+    fontWeight: '700',
+    fontSize: 15,
   },
   logoutFab: {
     position: 'absolute',
     margin: 16,
     right: 0,
     bottom: 0,
-    backgroundColor: '#DC3545',
+    backgroundColor: colors.primary,
+    borderRadius: 28,
+    borderWidth: 3,
+    borderColor: colors.secondary,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FAFBFC',
+    backgroundColor: colors.background,
   },
   loadingText: {
     marginTop: 16,
-    color: '#6C757D',
+    color: colors.text.secondary,
+    fontWeight: '600',
   },
   emptyTitle: {
     fontWeight: '700',
-    color: '#2C3E50',
+    color: colors.text.primary,
     marginTop: 24,
     marginBottom: 8,
     textAlign: 'center',
   },
   emptySubtitle: {
-    color: '#6C757D',
+    color: colors.text.secondary,
     textAlign: 'center',
     lineHeight: 1.6 * 18,
   },

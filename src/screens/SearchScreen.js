@@ -8,6 +8,7 @@ import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
 import { userAPI } from '../services/api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { colors } from '../styles/theme';
 
 export default function SearchScreen({ navigation }) {
   const { likedProfileIds, toggleLike } = useContext(AuthContext);
@@ -153,13 +154,15 @@ export default function SearchScreen({ navigation }) {
   };
 
   const renderHeader = () => (
-    <Surface style={styles.header} elevation={2}>
+    <Surface style={styles.header} elevation={3}>
       <View style={styles.headerContent}>
-        <Icon
-          name="magnify"
-          size={32}
-          color="#FF6B6B"
-        />
+        <View style={[styles.iconContainer, { backgroundColor: colors.secondary + '15' }]}>
+          <Icon
+            name="magnify"
+            size={32}
+            color={colors.secondary}
+          />
+        </View>
         <View style={styles.headerText}>
           <Text variant="headlineMedium" style={styles.title}>
             Search & Filter
@@ -170,21 +173,23 @@ export default function SearchScreen({ navigation }) {
         </View>
       </View>
       
-      <CustomButton 
-        mode="outlined" 
-        onPress={() => setShowFilters(!showFilters)}
-        style={styles.filterToggle}
-        size="small"
-      >
-        {showFilters ? 'Hide Filters' : 'Show Filters'}
-      </CustomButton>
+      <View style={styles.filterButtonContainer}>
+        <CustomButton 
+          mode="outlined" 
+          onPress={() => setShowFilters(!showFilters)}
+          style={styles.filterToggle}
+          size="small"
+        >
+          {showFilters ? 'Hide Filters' : 'Show Filters'}
+        </CustomButton>
+      </View>
     </Surface>
   );
 
   const renderFilters = () => (
-    <Surface style={styles.filtersContainer} elevation={1}>
+    <Surface style={styles.filtersContainer} elevation={2}>
       <View style={styles.filtersHeader}>
-        <Icon name="filter-variant" size={20} color="#FF6B6B" />
+        <Icon name="filter-variant" size={20} color={colors.primary} />
         <Text variant="titleMedium" style={styles.filtersTitle}>Search Filters</Text>
       </View>
       
@@ -284,18 +289,20 @@ export default function SearchScreen({ navigation }) {
     <View style={styles.emptyState}>
       {loading ? (
         <>
-          <ActivityIndicator size="large" color="#FF6B6B" />
+          <ActivityIndicator size="large" color={colors.primary} />
           <Text variant="bodyLarge" style={styles.emptySubtitle}>
             Searching...
           </Text>
         </>
       ) : error ? (
         <>
-          <Icon
-            name="alert-circle-outline"
-            size={80}
-            color="#DC3545"
-          />
+          <View style={[styles.emptyIconContainer, { backgroundColor: colors.error + '15' }]}>
+            <Icon
+              name="alert-circle-outline"
+              size={64}
+              color={colors.error}
+            />
+          </View>
           <Text variant="headlineSmall" style={styles.emptyTitle}>
             Search Error
           </Text>
@@ -305,11 +312,13 @@ export default function SearchScreen({ navigation }) {
         </>
       ) : (
         <>
-          <Icon
-            name="magnify"
-            size={80}
-            color="#ADB5BD"
-          />
+          <View style={[styles.emptyIconContainer, { backgroundColor: colors.secondary + '15' }]}>
+            <Icon
+              name="magnify"
+              size={64}
+              color={colors.secondary}
+            />
+          </View>
           <Text variant="headlineSmall" style={styles.emptyTitle}>
             No results found
           </Text>
@@ -351,7 +360,7 @@ export default function SearchScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFBFC',
+    backgroundColor: colors.background,
   },
   listContent: {
     paddingBottom: 100,
@@ -359,53 +368,71 @@ const styles = StyleSheet.create({
   header: {
     margin: 24,
     marginBottom: 16,
-    borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.gray[100],
   },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 24,
   },
+  iconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
   headerText: {
-    marginLeft: 16,
     flex: 1,
   },
   title: {
     fontWeight: '700',
-    color: '#2C3E50',
+    color: colors.text.primary,
     marginBottom: 4,
+    fontSize: 22,
+    letterSpacing: 0.3,
   },
   subtitle: {
-    color: '#6C757D',
+    color: colors.text.secondary,
+    fontSize: 15,
   },
-         filterToggle: {
-          //  marginHorizontal: 24,
-          
-           marginTop: 0,
-           marginBottom: 16,
-         },
-         filtersContainer: {
-           marginHorizontal: 24,
-           marginTop: 0,
-           marginBottom: 16,
-           borderRadius: 16,
-           backgroundColor: '#FFFFFF',
-           maxHeight: 500,
-         },
+  filterButtonContainer: {
+    paddingHorizontal: 24,
+    paddingBottom: 16,
+    alignItems: 'center',
+  },
+  filterToggle: {
+    width: '100%',
+    maxWidth: 200,
+  },
+  filtersContainer: {
+    marginHorizontal: 24,
+    marginTop: 0,
+    marginBottom: 16,
+    borderRadius: 20,
+    backgroundColor: colors.surface,
+    maxHeight: 500,
+    borderWidth: 1,
+    borderColor: colors.gray[100],
+  },
   filtersHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E9ECEF',
+    borderBottomColor: colors.gray[200],
   },
   filtersTitle: {
     fontWeight: '600',
-    color: '#2C3E50',
+    color: colors.text.primary,
     marginLeft: 8,
     flex: 1,
+    fontSize: 16,
   },
   filtersContent: {
     padding: 20,
@@ -436,17 +463,27 @@ const styles = StyleSheet.create({
     padding: 48,
     marginTop: 64,
   },
+  emptyIconContainer: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
   emptyTitle: {
     fontWeight: '700',
-    color: '#2C3E50',
-    marginTop: 24,
+    color: colors.text.primary,
+    marginTop: 16,
     marginBottom: 8,
     textAlign: 'center',
+    fontSize: 20,
   },
   emptySubtitle: {
-    color: '#6C757D',
+    color: colors.text.secondary,
     textAlign: 'center',
-    lineHeight: 1.6 * 18,
+    lineHeight: 1.6 * 16,
+    fontSize: 15,
   },
 });
 

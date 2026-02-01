@@ -12,6 +12,8 @@ import CustomButton from '../components/CustomButton';
 import {AuthContext} from '../context/AuthContext';
 import {userAPI} from '../services/api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { colors } from '../styles/theme';
+
 
 const {height} = Dimensions.get('window');
 
@@ -92,21 +94,54 @@ export default function RegisterScreen({navigation}) {
         style={styles.backgroundImage}
         imageStyle={styles.backgroundImageStyle}>
         <View style={styles.overlay} />
+        <View style={styles.decorativeTop} />
 
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}>
           <Surface style={styles.formContainer} elevation={8}>
+            {/* Ornate Corner Decorations */}
+            <View style={[styles.cornerOrnament, styles.topLeftCorner]} />
+            <View style={[styles.cornerOrnament, styles.topRightCorner]} />
+            <View style={[styles.cornerOrnament, styles.bottomLeftCorner]} />
+            <View style={[styles.cornerOrnament, styles.bottomRightCorner]} />
+            
+            {/* Decorative Top Border */}
+            <View style={styles.decorativeTopBorder}>
+              <View style={styles.borderPattern} />
+              <View style={styles.borderPattern} />
+              <View style={styles.borderPattern} />
+              <View style={styles.borderPattern} />
+            </View>
+            
+            <View style={styles.decorativeBorder} />
             <View style={styles.header}>
               <View style={styles.logoContainer}>
-                <Icon name="account-plus" size={48} color="#FF6B6B" />
+                <View style={styles.logoOuterRing} />
+                <View style={styles.logoMiddleRing} />
+                <View style={styles.logoInner}>
+                  <Icon name="account-heart" size={44} color={colors.white} />
+                </View>
+                <View style={styles.logoGlow} />
               </View>
-              <Text variant="headlineMedium" style={styles.title}>
-                Create Account
-              </Text>
-              <Text variant="bodyLarge" style={styles.subtitle}>
-                Join us to find your perfect match
-              </Text>
+              <View style={styles.titleContainer}>
+                <View style={styles.titleUnderline} />
+                <Text variant="headlineMedium" style={styles.title}>
+                  Create Account
+                </Text>
+                <Text variant="bodyLarge" style={styles.subtitle}>
+                  Join us to find your perfect life partner
+                </Text>
+                <View style={styles.titleUnderline} />
+              </View>
+            </View>
+            
+            {/* Decorative Bottom Border */}
+            <View style={styles.decorativeBottomBorder}>
+              <View style={styles.borderPattern} />
+              <View style={styles.borderPattern} />
+              <View style={styles.borderPattern} />
+              <View style={styles.borderPattern} />
             </View>
 
             <View style={styles.form}>
@@ -173,7 +208,7 @@ export default function RegisterScreen({navigation}) {
 
               {error ? (
                 <View style={styles.errorContainer}>
-                  <Icon name="alert-circle" size={20} color="#DC3545" />
+                  <Icon name="alert-circle" size={20} color={colors.error} />
                   <Text style={styles.errorText}>{error}</Text>
                 </View>
               ) : null}
@@ -220,7 +255,17 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: colors.primary + '90',
+  },
+  decorativeTop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 150,
+    backgroundColor: colors.secondary + '30',
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
   },
   scrollContent: {
     flexGrow: 1,
@@ -228,43 +273,173 @@ const styles = StyleSheet.create({
     paddingTop: 48,
   },
   formContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    padding: 48,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 8},
-    shadowOpacity: 0.25,
-    shadowRadius: 16,
-    elevation: 16,
+    backgroundColor: colors.surfaceGold,
+    borderRadius: 0,
+    padding: 36,
+    shadowColor: colors.maroon,
+    shadowOffset: {width: 0, height: 12},
+    shadowOpacity: 0.4,
+    shadowRadius: 24,
+    elevation: 20,
+    borderWidth: 6,
+    borderColor: colors.secondary,
+    position: 'relative',
+    overflow: 'visible',
+  },
+  decorativeBorder: {
+    position: 'absolute',
+    top: 3,
+    left: 3,
+    right: 3,
+    bottom: 3,
+    borderRadius: 0,
+    borderWidth: 4,
+    borderColor: colors.primary,
+    borderStyle: 'solid',
+  },
+  decorativeTopBorder: {
+    position: 'absolute',
+    top: -6,
+    left: 20,
+    right: 20,
+    height: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    zIndex: 1,
+  },
+  decorativeBottomBorder: {
+    position: 'absolute',
+    bottom: -6,
+    left: 20,
+    right: 20,
+    height: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    zIndex: 1,
+  },
+  borderPattern: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: colors.secondary,
+  },
+  cornerOrnament: {
+    position: 'absolute',
+    width: 32,
+    height: 32,
+    borderWidth: 4,
+    borderColor: colors.secondary,
+    zIndex: 2,
+  },
+  topLeftCorner: {
+    top: -6,
+    left: -6,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+  },
+  topRightCorner: {
+    top: -6,
+    right: -6,
+    borderLeftWidth: 0,
+    borderBottomWidth: 0,
+  },
+  bottomLeftCorner: {
+    bottom: -6,
+    left: -6,
+    borderRightWidth: 0,
+    borderTopWidth: 0,
+  },
+  bottomRightCorner: {
+    bottom: -6,
+    right: -6,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
   },
   header: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: 36,
   },
   logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#FF8E8E',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 4,
+    marginBottom: 28,
+    position: 'relative',
+  },
+  logoOuterRing: {
+    position: 'absolute',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 5,
+    borderColor: colors.secondary,
+  },
+  logoMiddleRing: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 4,
+    borderColor: colors.primary,
+  },
+  logoInner: {
+    width: 84,
+    height: 84,
+    borderRadius: 42,
+    backgroundColor: colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 4,
+    borderColor: colors.white,
+    shadowColor: colors.secondary,
+    shadowOffset: {width: 0, height: 6},
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 12,
+  },
+  logoGlow: {
+    position: 'absolute',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: colors.secondary,
+    opacity: 0.25,
+  },
+  titleContainer: {
+    alignItems: 'center',
+    width: '100%',
+  },
+  titleUnderline: {
+    width: 80,
+    height: 4,
+    backgroundColor: colors.secondary,
+    marginVertical: 6,
+    borderRadius: 2,
   },
   title: {
-    fontWeight: '700',
-    color: '#2C3E50',
+    fontWeight: '800',
+    color: colors.primary,
     marginBottom: 8,
     textAlign: 'center',
+    fontSize: 28,
+    letterSpacing: 1,
+    textShadowColor: colors.secondary + '50',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   subtitle: {
-    color: '#6C757D',
+    color: colors.primary,
     textAlign: 'center',
-    lineHeight: 1.6 * 18,
+    lineHeight: 1.6 * 16,
+    fontSize: 16,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
   form: {
     gap: 16,
@@ -274,25 +449,31 @@ const styles = StyleSheet.create({
   },
   genderLabel: {
     marginBottom: 8,
-    color: '#2C3E50',
-    fontWeight: '500',
+    color: colors.text.primary,
+    fontWeight: '600',
+    fontSize: 15,
   },
   segmentedButtons: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.surfaceGold,
+    borderWidth: 2,
+    borderColor: colors.secondary + '40',
   },
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFEBEE',
-    padding: 16,
+    backgroundColor: colors.error + '15',
+    padding: 14,
     borderRadius: 12,
     marginVertical: 8,
+    borderWidth: 1,
+    borderColor: colors.error + '30',
   },
   errorText: {
-    color: '#DC3545',
+    color: colors.error,
     marginLeft: 8,
     flex: 1,
     fontWeight: '500',
+    fontSize: 14,
   },
   registerButton: {
     marginTop: 24,
@@ -304,16 +485,18 @@ const styles = StyleSheet.create({
   },
   dividerLine: {
     flex: 1,
-    height: 1,
-    backgroundColor: '#CED4DA',
+    height: 1.5,
+    backgroundColor: colors.gray[300],
   },
   dividerText: {
     marginHorizontal: 16,
-    color: '#6C757D',
-    fontWeight: '500',
+    color: colors.text.secondary,
+    fontWeight: '600',
+    fontSize: 14,
   },
   loginButton: {
-    borderColor: '#FF6B6B',
-    borderWidth: 2,
+    borderColor: colors.secondary,
+    borderWidth: 3,
+    borderRadius: 25,
   },
 });
