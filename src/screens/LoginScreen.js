@@ -11,7 +11,7 @@ import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import {AuthContext} from '../context/AuthContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors } from '../styles/theme';
+import { colors, shadows } from '../styles/theme';
 
 const {height} = Dimensions.get('window');
 
@@ -49,54 +49,23 @@ export default function LoginScreen({navigation}) {
         style={styles.backgroundImage}
         imageStyle={styles.backgroundImageStyle}>
         <View style={styles.overlay} />
-        <View style={styles.decorativeTop} />
 
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}>
-          <Surface style={styles.formContainer} elevation={8}>
-            {/* Ornate Corner Decorations */}
-            <View style={[styles.cornerOrnament, styles.topLeftCorner]} />
-            <View style={[styles.cornerOrnament, styles.topRightCorner]} />
-            <View style={[styles.cornerOrnament, styles.bottomLeftCorner]} />
-            <View style={[styles.cornerOrnament, styles.bottomRightCorner]} />
-            
-            {/* Decorative Top Border */}
-            <View style={styles.decorativeTopBorder}>
-              <View style={styles.borderPattern} />
-              <View style={styles.borderPattern} />
-              <View style={styles.borderPattern} />
-              <View style={styles.borderPattern} />
-            </View>
-            
-            <View style={styles.decorativeBorder} />
+          <Surface style={styles.formContainer} elevation={0}>
             <View style={styles.header}>
               <View style={styles.logoContainer}>
-                <View style={styles.logoOuterRing} />
-                <View style={styles.logoMiddleRing} />
-                <View style={styles.logoInner}>
-                  <Icon name="heart-multiple" size={44} color={colors.white} />
-                </View>
-                <View style={styles.logoGlow} />
+                <Icon name="heart-multiple" size={56} color={colors.white} />
               </View>
               <View style={styles.titleContainer}>
-                <View style={styles.titleUnderline} />
-                <Text variant="headlineMedium" style={styles.title}>
+                <Text variant="headlineLarge" style={styles.title}>
                   Welcome Back
                 </Text>
                 <Text variant="bodyLarge" style={styles.subtitle}>
-                  Sign in to find your perfect life partner
+                  Sign in to continue your journey
                 </Text>
-                <View style={styles.titleUnderline} />
               </View>
-            </View>
-            
-            {/* Decorative Bottom Border */}
-            <View style={styles.decorativeBottomBorder}>
-              <View style={styles.borderPattern} />
-              <View style={styles.borderPattern} />
-              <View style={styles.borderPattern} />
-              <View style={styles.borderPattern} />
             </View>
 
             <View style={styles.form}>
@@ -171,7 +140,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.primary + '90',
+    backgroundColor: colors.primary + '40',
   },
   decorativeTop: {
     position: 'absolute',
@@ -191,16 +160,10 @@ const styles = StyleSheet.create({
   formContainer: {
     backgroundColor: colors.surfaceGold,
     borderRadius: 0,
-    padding: 36,
-    shadowColor: colors.maroon,
-    shadowOffset: {width: 0, height: 12},
-    shadowOpacity: 0.4,
-    shadowRadius: 24,
-    elevation: 20,
-    borderWidth: 6,
+    padding: 32,
+    borderWidth: 4,
     borderColor: colors.secondary,
-    position: 'relative',
-    overflow: 'visible',
+    ...shadows.xl,
   },
   decorativeBorder: {
     position: 'absolute',
@@ -379,6 +342,9 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     marginTop: 24,
+    backgroundColor: colors.primary,
+    borderRadius: 16,
+    ...shadows.md,
   },
   divider: {
     flexDirection: 'row',
@@ -397,9 +363,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   registerButton: {
-    borderColor: colors.secondary,
-    borderWidth: 3,
-    borderRadius: 25,
+    borderColor: colors.primary,
+    borderWidth: 2,
+    borderRadius: 16,
   },
   forgotButton: {
     marginTop: 8,

@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, RefreshControl, Dimensions } from 'react-native';
-import { Text, Surface, FAB, Chip, ActivityIndicator } from 'react-native-paper';
+import { Text, Surface, Chip, ActivityIndicator } from 'react-native-paper';
 import ProfileCard from '../components/ProfileCard';
 import { mockProfiles } from '../data/mockProfiles';
 import { AuthContext } from '../context/AuthContext';
 import { userAPI } from '../services/api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors } from '../styles/theme';
+import { colors, shadows } from '../styles/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -41,9 +41,9 @@ export default function HomeScreen({ navigation }) {
           heightCm: user.heightCm || 0,
           photo: user.photoUri || 'https://randomuser.me/api/portraits/men/1.jpg',
         }));
-        // setProfiles(transformedProfiles); 
+        setProfiles(transformedProfiles); 
         // -------------------------------------
-        setProfiles(mockProfiles);
+        // setProfiles(mockProfiles);
 
         console.log("transformedProfiles",transformedProfiles)
       } else {
@@ -93,45 +93,22 @@ export default function HomeScreen({ navigation }) {
 
   const renderHeader = () => (
     <View style={styles.header}>
-      {/* Ornate Top Pattern */}
-      <View style={styles.ornateTopPattern}>
-        <View style={styles.patternDot} />
-        <View style={styles.patternDot} />
-        <View style={styles.patternDot} />
-        <View style={styles.patternDot} />
-        <View style={styles.patternDot} />
-      </View>
-      
-      <View style={styles.headerContent}>
-        <View style={styles.titleContainer}>
-          <View style={styles.titleIconContainer}>
-            <View style={styles.iconOuterRing} />
-            <View style={styles.iconMiddleRing} />
-            <View style={styles.iconInner}>
-              <Icon name="heart-multiple" size={28} color={colors.white} />
+      <View style={styles.headerGradient}>
+        <View style={styles.headerContent}>
+          <View style={styles.titleContainer}>
+            <View style={styles.titleIconContainer}>
+              <Icon name="heart-multiple" size={32} color={colors.white} />
             </View>
-            <View style={styles.iconGlow} />
-          </View>
-          <View style={styles.titleTextContainer}>
-            <View style={styles.titleUnderline} />
-            <Text variant="headlineMedium" style={styles.title}>
-              Discover Matches
-            </Text>
-            <Text variant="bodyLarge" style={styles.subtitle}>
-              Find your perfect life partner
-            </Text>
-            <View style={styles.titleUnderline} />
+            <View style={styles.titleTextContainer}>
+              <Text variant="headlineMedium" style={styles.title}>
+                Discover Matches
+              </Text>
+              <Text variant="bodyMedium" style={styles.subtitle}>
+                Find your perfect life partner
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
-      
-      {/* Decorative Bottom Pattern */}
-      <View style={styles.ornateBottomPattern}>
-        <View style={styles.patternDot} />
-        <View style={styles.patternDot} />
-        <View style={styles.patternDot} />
-        <View style={styles.patternDot} />
-        <View style={styles.patternDot} />
       </View>
       
       <View style={styles.statsContainer}>
@@ -275,13 +252,6 @@ export default function HomeScreen({ navigation }) {
         contentContainerStyle={styles.listContent}
       />
       
-      <FAB
-        icon="magnify"
-        style={styles.fab}
-        onPress={() => navigation.navigate('Search')}
-        label="Search"
-        color={colors.white}
-      />
     </View>
   );
 }
@@ -292,57 +262,26 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   listContent: {
-    paddingBottom: 100, // Space for FAB
+    paddingBottom: 20,
   },
   header: {
-    padding: 16,
-    backgroundColor: colors.surfaceGold,
+    marginBottom: 20,
+    borderRadius: 0,
+  },
+  headerGradient: {
+    backgroundColor: colors.primary,
+    // paddingVertical: 8,
+    paddingTop: 30,
+    // marginTop: 20,
+    paddingHorizontal: 20,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    shadowColor: colors.maroon,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 10,
     borderBottomWidth: 4,
     borderBottomColor: colors.secondary,
-    borderTopWidth: 4,
-    borderTopColor: colors.secondary,
-    borderLeftWidth: 3,
-    borderLeftColor: colors.primary,
-    borderRightWidth: 3,
-    borderRightColor: colors.primary,
-    position: 'relative',
-    overflow: 'visible',
-  },
-  ornateTopPattern: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: 8,
-    backgroundColor: colors.primary,
-    marginHorizontal: -3,
-    marginTop: -4,
-    paddingHorizontal: 6,
-  },
-  patternDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: colors.secondary,
-  },
-  ornateBottomPattern: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: 8,
-    backgroundColor: colors.primary,
-    marginHorizontal: -3,
-    marginBottom: -4,
-    paddingHorizontal: 6,
+    ...shadows.lg,
   },
   headerContent: {
-    marginBottom: 14,
+    marginBottom: 20,
   },
   titleContainer: {
     flexDirection: 'row',
@@ -350,129 +289,73 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   titleIconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 64,
+    height: 44,
+    borderRadius: 32,
+    backgroundColor: colors.white + '20',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-    position: 'relative',
-  },
-  iconOuterRing: {
-    position: 'absolute',
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    borderWidth: 3,
-    borderColor: colors.secondary,
-  },
-  iconMiddleRing: {
-    position: 'absolute',
-    width: 46,
-    height: 46,
-    borderRadius: 23,
+    marginRight: 16,
     borderWidth: 2,
-    borderColor: colors.primary,
-  },
-  iconInner: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: colors.white,
-    shadowColor: colors.secondary,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.4,
-    shadowRadius: 6,
-    elevation: 8,
-  },
-  iconGlow: {
-    position: 'absolute',
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: colors.secondary,
-    opacity: 0.2,
-    top: 0,
-    left: 0,
+    borderColor: colors.white + '40',
   },
   titleTextContainer: {
     flex: 1,
-    alignItems: 'center',
-    position: 'relative',
-  },
-  titleUnderline: {
-    width: 40,
-    height: 2,
-    backgroundColor: colors.secondary,
-    marginVertical: 2,
-    borderRadius: 1,
   },
   title: {
     fontWeight: '800',
-    color: colors.primary,
-    marginBottom: 4,
-    letterSpacing: 0.8,
-    fontSize: 20,
-    textShadowColor: colors.secondary + '50',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    color: colors.white,
+    marginBottom: 6,
+    fontSize: 28,
+    letterSpacing: 0.5,
   },
   subtitle: {
-    color: colors.primary,
-    fontSize: 13,
-    fontWeight: '600',
-    letterSpacing: 0.2,
+    color: colors.white + 'DD',
+    fontSize: 15,
+    fontWeight: '500',
   },
   statsContainer: {
     flexDirection: 'row',
-    gap: 10,
-    marginBottom: 14,
+    gap: 12,
+    marginBottom: 20,
+    paddingHorizontal: 20,
   },
   statCard: {
     flex: 1,
-    padding: 12,
-    borderRadius: 16,
+    padding: 16,
+    borderRadius: 20,
     alignItems: 'center',
-    backgroundColor: colors.surfaceGold,
-    borderWidth: 2,
-    borderColor: colors.secondary,
-    shadowColor: colors.maroon,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 6,
-    position: 'relative',
+    backgroundColor: colors.white,
+    ...shadows.md,
   },
   statIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 8,
   },
   statNumber: {
     fontWeight: '700',
-    marginTop: 2,
-    fontSize: 18,
+    marginTop: 4,
+    fontSize: 22,
   },
   statLabel: {
     color: colors.text.secondary,
-    marginTop: 2,
-    fontSize: 10,
+    marginTop: 4,
+    fontSize: 12,
+    fontWeight: '500',
   },
   filtersContainer: {
-    marginBottom: 6,
+    marginBottom: 12,
+    paddingHorizontal: 20,
   },
   filtersTitle: {
-    fontWeight: '600',
+    fontWeight: '700',
     color: colors.text.primary,
-    marginBottom: 8,
-    fontSize: 14,
+    marginBottom: 12,
+    fontSize: 16,
   },
   chipsRow: {
     flexDirection: 'row',
@@ -480,18 +363,19 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   filterChip: {
-    backgroundColor: colors.surfaceGold,
-    borderWidth: 2,
-    borderColor: colors.secondary + '60',
-    borderRadius: 20,
+    backgroundColor: colors.white,
+    borderWidth: 1.5,
+    borderColor: colors.gray[300],
+    borderRadius: 24,
+    ...shadows.sm,
   },
   selectedChip: {
     backgroundColor: colors.primary,
-    borderColor: colors.secondary,
-    borderWidth: 3,
+    borderColor: colors.primary,
+    borderWidth: 1.5,
   },
   chipText: {
-    color: colors.primary,
+    color: colors.text.secondary,
     fontWeight: '600',
     fontSize: 13,
   },
@@ -528,21 +412,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 1.6 * 16,
     fontSize: 15,
-  },
-  fab: {
-    position: 'absolute',
-    margin: 24,
-    right: 0,
-    bottom: 0,
-    backgroundColor: colors.primary,
-    borderRadius: 32,
-    shadowColor: colors.secondary,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-    elevation: 12,
-    borderWidth: 3,
-    borderColor: colors.secondary,
   },
 });
 

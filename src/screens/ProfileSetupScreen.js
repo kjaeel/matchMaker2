@@ -21,6 +21,8 @@ export default function ProfileSetupScreen() {
     city: '',
     state: '',
     country: '',
+    bio: '',
+    salary: '',
   });
   const [photoUri, setPhoto] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -63,6 +65,8 @@ export default function ProfileSetupScreen() {
         city: profile.city,
         state: profile.state || 'Not specified',
         country: profile.country || 'India',
+        bio: profile.bio || '',
+        salary: profile.salary || '',
       });
     } catch (err) {
       setError(err.message || 'Failed to save profile');
@@ -145,6 +149,15 @@ export default function ProfileSetupScreen() {
         onChangeText={(v) => set('occupation', v)}
         size="small"
       />
+
+      <CustomInput 
+        label="Salary" 
+        value={profile.salary} 
+        onChangeText={(v) => set('salary', v)}
+        keyboardType="numeric"
+        size="small"
+        left={<CustomInput.Icon icon="currency-inr" />}
+      />
     </Surface>
   );
 
@@ -199,6 +212,23 @@ export default function ProfileSetupScreen() {
     </Surface>
   );
 
+  const renderAboutSection = () => (
+    <Surface style={styles.detailsSection} elevation={2}>
+      <Text variant="titleMedium" style={styles.sectionTitle}>About</Text>
+      
+      <CustomInput 
+        label="Bio" 
+        value={profile.bio} 
+        onChangeText={(v) => set('bio', v)}
+        multiline
+        numberOfLines={4}
+        placeholder="Tell others about yourself..."
+        size="small"
+        style={styles.bioInput}
+      />
+    </Surface>
+  );
+
   return (
     <View style={styles.container}>
       <ScrollView 
@@ -209,6 +239,7 @@ export default function ProfileSetupScreen() {
         {renderPhotoSection()}
         {renderBasicDetails()}
         {renderPersonalDetails()}
+        {renderAboutSection()}
         
         {error ? (
           <View style={styles.errorContainer}>
@@ -329,6 +360,9 @@ const styles = StyleSheet.create({
   saveButton: {
     marginHorizontal: 24,
     marginTop: 16,
+  },
+  bioInput: {
+    minHeight: 100,
   },
 });
 

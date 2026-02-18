@@ -5,8 +5,10 @@ import MainTabs from './MainTabs';
 import { AuthContext } from '../context/AuthContext';
 import ProfileSetupScreen from '../screens/ProfileSetupScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
+import ChatDetailScreen from '../screens/ChatDetailScreen';
 import { ActivityIndicator } from 'react-native-paper';
 import { View } from 'react-native';
+import { colors } from '../styles/theme';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,13 +52,27 @@ export default function AppNavigator() {
         options={{ 
           title: 'Profile Details',
           headerStyle: {
-            backgroundColor: '#FF6B6B',
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#FFFFFF',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
           },
         }}
+      />
+      <Stack.Screen
+        name="ChatDetail"
+        component={ChatDetailScreen}
+        options={({ route }) => ({
+          title: route?.params?.chat?.name || 'Chat',
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        })}
       />
     </Stack.Navigator>
   );

@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import { authAPI } from '../services/api';
 
 const SESSION_KEY = 'MM_SESSION_V1';
 
@@ -42,28 +43,42 @@ export function AuthProvider({ children }) {
   const login = useCallback(async (identifier, password) => {
     if (!identifier || !password) throw new Error('Missing credentials');
     
-    // For demo purposes, create a user with complete profile
-    // In real app, this would validate against backend
+    console.log('🔐 AuthContext.login called with:', { identifier: identifier.substring(0, 3) + '***', passwordLength: password.length });
+    
+    // Call login API
+    const result = await authAPI.login(identifier, password);
+    
+    console.log('🔐 AuthContext.login result:', { success: result.success, error: result.error, status: result.status });
+    
+    if (!result.success) {
+      const errorMsg = result.status === 403 
+        ? 'Access forbidden. Please check your credentials or contact support.'
+        : (result.error || 'Login failed');
+      throw new Error(errorMsg);
+    }
+    
+    // Store user data from API response
+    const apiUser = result.data;
     const nextUser = {
-      id: 'u1',
-      fullName: 'Demo User',
-      email: identifier.includes('@') ? identifier : undefined,
-      phone: !identifier.includes('@') ? identifier : undefined,
-      gender: 'Male',
-      dob: '1995-01-01',
-      photoUri: undefined,
+      id: apiUser.id,
+      name: apiUser.name,
+      fullName: apiUser.name,
+      age: apiUser.age,
+      gender: apiUser.gender,
+      email: apiUser.email,
+      phone: apiUser.phone,
+      city: apiUser.city,
+      religion: apiUser.religion,
+      caste: apiUser.caste,
+      photoUri: apiUser.imagePaths?.[0] || undefined,
       profile: {
-        age: 28,
-        heightCm: 175,
-        education: 'B.Tech',
-        occupation: 'Software Engineer',
-        religion: 'Hindu',
-        caste: 'Brahmin',
-        city: 'Bengaluru',
-        state: 'Karnataka',
-        country: 'India',
+        age: apiUser.age,
+        gender: apiUser.gender,
+        city: apiUser.city,
+        religion: apiUser.religion,
+        caste: apiUser.caste,
       },
-      isProfileComplete: true, // Set to true for login flow
+      isProfileComplete: true,
     };
     setUser(nextUser);
     await persist(nextUser, undefined);

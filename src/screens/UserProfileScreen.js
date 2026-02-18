@@ -15,14 +15,66 @@ export default function UserProfileScreen({ route, navigation }) {
   // Check if we're viewing another user's profile or our own
   const profile = route?.params?.profile;
   const isViewingOtherProfile = !!profile;
-  const isLiked = isViewingOtherProfile ? likedProfileIds.includes(profile?.id) : false;
+  // const isLiked = isViewingOtherProfile ? likedProfileIds.includes(profile?.id) : false;
+  const safeLikedIds = Array.isArray(likedProfileIds) ? likedProfileIds : [];
+  const isLiked = isViewingOtherProfile
+    ? safeLikedIds.includes(profile?.id)
+    : false;
+  // Safe data transformation function - ensures ALL values are safe for rendering
+  const safeTransformProfile = (data) => {
+    if (!data) return null;
+    
+    const safeString = (val) => {
+      if (val === null || val === undefined) return null;
+      if (typeof val === 'string') {
+        const trimmed = val.trim();
+        return trimmed.length > 0 ? trimmed : null;
+      }
+      if (typeof val === 'number') return String(val);
+      if (typeof val === 'boolean') return String(val);
+      return null;
+    };
+
+    const safeNumber = (val) => {
+      if (val === null || val === undefined) return null;
+      if (typeof val === 'number') return val;
+      if (typeof val === 'string') {
+        const parsed = parseFloat(val);
+        return isNaN(parsed) ? null : parsed;
+      }
+      return null;
+    };
+
+    return {
+      id: data.id || null,
+      name: safeString(data.name || data.fullName) || 'Not specified',
+      fullName: safeString(data.name || data.fullName) || 'Not specified',
+      age: safeNumber(data.age || data.profile?.age) || null,
+      gender: safeString(data.gender || data.profile?.gender) || 'Not specified',
+      religion: safeString(data.religion || data.profile?.religion) || null,
+      caste: safeString(data.caste || data.profile?.caste) || 'Not specified',
+      city: safeString(data.city || data.profile?.city) || 'Not specified',
+      state: safeString(data.state || data.profile?.state) || null,
+      country: safeString(data.country || data.profile?.country) || 'Not specified',
+      education: safeString(data.education || data.profile?.education) || 'Not specified',
+      occupation: safeString(data.occupation || data.profile?.occupation) || 'Not specified',
+      heightCm: safeNumber(data.heightCm || data.profile?.heightCm) || 0,
+      email: safeString(data.email) || 'Not specified',
+      phone: safeString(data.phone) || null,
+      bio: safeString(data.bio || data.profile?.bio || data.about) || 'Not specified',
+      salary: safeNumber(data.salary || data.profile?.salary) || null,
+      photo: safeString(data.photo || data.photoUri || data.imagePaths?.[0]) || null,
+      photoUri: safeString(data.photoUri || data.imagePaths?.[0]) || null,
+    };
+  };
 
   // Fetch user details from API if viewing another user's profile
   useEffect(() => {
     if (isViewingOtherProfile && profile?.id) {
       fetchUserDetails(profile.id);
-    } else {
-      setProfileData(user);
+    } else if (user) {
+      const safeUser = safeTransformProfile(user);
+      setProfileData(safeUser);
     }
   }, [isViewingOtherProfile, profile?.id, user]);
 
@@ -34,32 +86,33 @@ export default function UserProfileScreen({ route, navigation }) {
       const result = await userAPI.getUserById(userId);
       
       if (result.success) {
-        // Transform API data to match our expected format
-        const transformedProfile = {
-          id: result.data.id,
-          name: result.data.fullName,
-          age: result.data.age || calculateAge(result.data.dateOfBirth),
-          gender: result.data.gender,
-          religion: result.data.religion || 'Not specified',
-          caste: result.data.caste || 'Not specified',
-          city: result.data.city || 'Not specified',
-          state: result.data.state || 'Not specified',
-          country: result.data.country || 'Not specified',
-          education: result.data.education || 'Not specified',
-          occupation: result.data.occupation || 'Not specified',
-          heightCm: result.data.heightCm || 0,
-          photo: result.data.photoUri || 'https://randomuser.me/api/portraits/men/1.jpg',
-        };
+        // Map all fields from API response
+        const apiData = result.data;
+        const transformedProfile = safeTransformProfile({
+          ...apiData,
+          age: apiData.age || calculateAge(apiData.dateOfBirth),
+        });
+        console.log('📋 Transformed profile data:', JSON.stringify(transformedProfile, null, 2));
         setProfileData(transformedProfile);
       } else {
         setError(result.error);
-        // Fallback to passed profile data
-        setProfileData(profile);
+        // Fallback to passed profile data - MUST transform it
+        if (profile) {
+          const transformedProfile = safeTransformProfile(profile);
+          setProfileData(transformedProfile);
+        } else {
+          setProfileData(null);
+        }
       }
     } catch (err) {
       setError(err.message);
-      // Fallback to passed profile data
-      setProfileData(profile);
+      // Fallback to passed profile data - MUST transform it
+      if (profile) {
+        const transformedProfile = safeTransformProfile(profile);
+        setProfileData(transformedProfile);
+      } else {
+        setProfileData(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -89,6 +142,21 @@ export default function UserProfileScreen({ route, navigation }) {
     );
   }
 
+  // Ensure profileData is always properly structured
+  if (typeof profileData !== 'object' || profileData === null) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Icon name="alert-circle-outline" size={80} color={colors.error} />
+        <Text variant="headlineSmall" style={styles.emptyTitle}>
+          Invalid Profile Data
+        </Text>
+        <Text variant="bodyLarge" style={styles.emptySubtitle}>
+          Please try again
+        </Text>
+      </View>
+    );
+  }
+
   // Handle error state
   if (error && !profileData) {
     return (
@@ -98,7 +166,7 @@ export default function UserProfileScreen({ route, navigation }) {
           Error Loading Profile
         </Text>
         <Text variant="bodyLarge" style={styles.emptySubtitle}>
-          {error}
+          {String(error || 'Unknown error')}
         </Text>
       </View>
     );
@@ -135,10 +203,12 @@ export default function UserProfileScreen({ route, navigation }) {
           <View style={styles.nameContainer}>
             <View style={styles.titleUnderline} />
             <Text variant="headlineMedium" style={styles.name}>
-              {profileData.name || profileData.fullName}
+              {String(profileData.name || profileData.fullName || 'Name not specified')}
             </Text>
             <Text variant="bodyLarge" style={styles.age}>
-              {profileData.age} years old
+              {profileData.age && profileData.age !== 'Not specified' && profileData.age !== null
+                ? `${String(profileData.age)} years old` 
+                : 'Age not specified'}
             </Text>
             <View style={styles.locationContainer}>
               <Icon 
@@ -147,7 +217,10 @@ export default function UserProfileScreen({ route, navigation }) {
                 color={colors.primary} 
               />
               <Text variant="bodyMedium" style={styles.location}>
-                {profileData.city}, {profileData.state}
+                {(() => {
+                  const parts = [profileData.city, profileData.state].filter(v => v && v !== 'Not specified' && v !== null);
+                  return parts.length > 0 ? parts.join(', ') : 'Location not specified';
+                })()}
               </Text>
             </View>
             <View style={styles.titleUnderline} />
@@ -158,21 +231,33 @@ export default function UserProfileScreen({ route, navigation }) {
           <View style={styles.actionButtons}>
             <Button
               mode="outlined"
-              onPress={() => toggleLike(profileData.id)}
+              onPress={() => {
+                if (profileData.id) {
+                  toggleLike(profileData.id);
+                }
+              }}
               style={[styles.actionButton, isLiked && styles.likedButton]}
               labelStyle={[styles.actionButtonText, isLiked && styles.likedButtonText]}
               icon={isLiked ? "heart" : "heart-outline"}
             >
               {isLiked ? 'Liked' : 'Like'}
             </Button>
-            <Button
-              mode="contained"
-              onPress={() => navigation.navigate('Chat')}
-              style={styles.actionButton}
-              icon="chat"
-            >
-              Message
-            </Button>
+                    <Button
+                      mode="contained"
+                      onPress={() => {
+                        const chatData = {
+                          id: profileData.id ? String(profileData.id) : null,
+                          name: String(profileData.name || profileData.fullName || 'User'),
+                          otherUserId: profileData.id ? String(profileData.id) : null,
+                          photo: profileData.photo || profileData.photoUri || null,
+                        };
+                        navigation.navigate('ChatDetail', { chat: chatData });
+                      }}
+                      style={styles.actionButton}
+                      icon="chat"
+                    >
+                      Message
+                    </Button>
           </View>
         )}
       </Surface>
@@ -202,35 +287,49 @@ export default function UserProfileScreen({ route, navigation }) {
         <Text variant="titleLarge" style={styles.sectionTitle}>About</Text>
         
         <View style={styles.chipsContainer}>
-          <Chip 
-            mode="outlined" 
-            style={styles.chip}
-            textStyle={styles.chipText}
-          >
-            {profileData.religion}
-          </Chip>
-          <Chip 
-            mode="outlined" 
-            style={styles.chip}
-            textStyle={styles.chipText}
-          >
-            {profileData.caste}
-          </Chip>
+          {(profileData.religion && profileData.religion !== null && profileData.religion !== 'Not specified') ? (
+            <Chip 
+              mode="outlined" 
+              style={styles.chip}
+              textStyle={styles.chipText}
+            >
+              {String(profileData.religion)}
+            </Chip>
+          ) : null}
+          {(profileData.caste && profileData.caste !== 'Not specified' && profileData.caste !== null) ? (
+            <Chip 
+              mode="outlined" 
+              style={styles.chip}
+              textStyle={styles.chipText}
+            >
+              {String(profileData.caste)}
+            </Chip>
+          ) : null}
         </View>
 
+        {/* Bio Section */}
+        {(profileData.bio && profileData.bio !== 'Not specified') ? (
+          <View style={styles.bioSection}>
+            <Text variant="bodyMedium" style={styles.bioText}>
+              {String(profileData.bio)}
+            </Text>
+          </View>
+        ) : null}
+
         <View style={styles.detailsList}>
+          {/* Personal Information */}
           <View style={styles.detailRow}>
             <View style={styles.iconWrapper}>
               <Icon 
-                name="school" 
+                name="gender-male-female" 
                 size={20} 
                 color={colors.secondary} 
               />
             </View>
             <View style={styles.detailContent}>
-              <Text variant="bodySmall" style={styles.detailLabel}>Education</Text>
+              <Text variant="bodySmall" style={styles.detailLabel}>Gender</Text>
               <Text variant="bodyMedium" style={styles.detailValue}>
-                {profileData.education}
+                {String(profileData.gender || 'Not specified')}
               </Text>
             </View>
           </View>
@@ -238,50 +337,184 @@ export default function UserProfileScreen({ route, navigation }) {
           <View style={styles.detailRow}>
             <View style={styles.iconWrapper}>
               <Icon 
-                name="briefcase" 
+                name="cake" 
                 size={20} 
                 color={colors.secondary} 
               />
             </View>
             <View style={styles.detailContent}>
-              <Text variant="bodySmall" style={styles.detailLabel}>Occupation</Text>
+              <Text variant="bodySmall" style={styles.detailLabel}>Age</Text>
               <Text variant="bodyMedium" style={styles.detailValue}>
-                {profileData.occupation}
+                {profileData.age && profileData.age !== 'Not specified' && profileData.age !== null
+                  ? (typeof profileData.age === 'number' ? `${profileData.age} years` : String(profileData.age))
+                  : 'Not specified'}
               </Text>
             </View>
           </View>
 
+          {/* Location Information */}
           <View style={styles.detailRow}>
             <View style={styles.iconWrapper}>
               <Icon 
-                name="human-male-height" 
+                name="map-marker" 
                 size={20} 
                 color={colors.secondary} 
               />
             </View>
             <View style={styles.detailContent}>
-              <Text variant="bodySmall" style={styles.detailLabel}>Height</Text>
+              <Text variant="bodySmall" style={styles.detailLabel}>City</Text>
               <Text variant="bodyMedium" style={styles.detailValue}>
-                {profileData.heightCm} cm
+                {String(profileData.city || 'Not specified')}
               </Text>
             </View>
           </View>
 
-          <View style={styles.detailRow}>
-            <View style={styles.iconWrapper}>
-              <Icon 
-                name="flag" 
-                size={20} 
-                color={colors.secondary} 
-              />
+          {(profileData.state && profileData.state !== 'Not specified' && profileData.state !== null) ? (
+            <View style={styles.detailRow}>
+              <View style={styles.iconWrapper}>
+                <Icon 
+                  name="map" 
+                  size={20} 
+                  color={colors.secondary} 
+                />
+              </View>
+              <View style={styles.detailContent}>
+                <Text variant="bodySmall" style={styles.detailLabel}>State</Text>
+                <Text variant="bodyMedium" style={styles.detailValue}>
+                  {String(profileData.state)}
+                </Text>
+              </View>
             </View>
-            <View style={styles.detailContent}>
-              <Text variant="bodySmall" style={styles.detailLabel}>Country</Text>
-              <Text variant="bodyMedium" style={styles.detailValue}>
-                {profileData.country}
-              </Text>
+          ) : null}
+
+          {(profileData.country && profileData.country !== 'Not specified' && profileData.country !== null) ? (
+            <View style={styles.detailRow}>
+              <View style={styles.iconWrapper}>
+                <Icon 
+                  name="flag" 
+                  size={20} 
+                  color={colors.secondary} 
+                />
+              </View>
+              <View style={styles.detailContent}>
+                <Text variant="bodySmall" style={styles.detailLabel}>Country</Text>
+                <Text variant="bodyMedium" style={styles.detailValue}>
+                  {String(profileData.country)}
+                </Text>
+              </View>
             </View>
-          </View>
+          ) : null}
+
+          {/* Education & Career */}
+          {(profileData.education && profileData.education !== 'Not specified') ? (
+            <View style={styles.detailRow}>
+              <View style={styles.iconWrapper}>
+                <Icon 
+                  name="school" 
+                  size={20} 
+                  color={colors.secondary} 
+                />
+              </View>
+              <View style={styles.detailContent}>
+                <Text variant="bodySmall" style={styles.detailLabel}>Education</Text>
+                <Text variant="bodyMedium" style={styles.detailValue}>
+                  {String(profileData.education)}
+                </Text>
+              </View>
+            </View>
+          ) : null}
+
+          {(profileData.occupation && profileData.occupation !== 'Not specified') ? (
+            <View style={styles.detailRow}>
+              <View style={styles.iconWrapper}>
+                <Icon 
+                  name="briefcase" 
+                  size={20} 
+                  color={colors.secondary} 
+                />
+              </View>
+              <View style={styles.detailContent}>
+                <Text variant="bodySmall" style={styles.detailLabel}>Occupation</Text>
+                <Text variant="bodyMedium" style={styles.detailValue}>
+                  {String(profileData.occupation)}
+                </Text>
+              </View>
+            </View>
+          ) : null}
+
+          {(profileData.salary !== null && profileData.salary !== undefined && profileData.salary !== 'Not specified') ? (
+            <View style={styles.detailRow}>
+              <View style={styles.iconWrapper}>
+                <Icon 
+                  name="currency-inr" 
+                  size={20} 
+                  color={colors.secondary} 
+                />
+              </View>
+              <View style={styles.detailContent}>
+                <Text variant="bodySmall" style={styles.detailLabel}>Salary</Text>
+                <Text variant="bodyMedium" style={styles.detailValue}>
+                  {`₹${String(profileData.salary)}`}
+                </Text>
+              </View>
+            </View>
+          ) : null}
+
+          {/* Physical Details */}
+          {(typeof profileData.heightCm === 'number' && profileData.heightCm > 0) ? (
+            <View style={styles.detailRow}>
+              <View style={styles.iconWrapper}>
+                <Icon 
+                  name="human-male-height" 
+                  size={20} 
+                  color={colors.secondary} 
+                />
+              </View>
+              <View style={styles.detailContent}>
+                <Text variant="bodySmall" style={styles.detailLabel}>Height</Text>
+                <Text variant="bodyMedium" style={styles.detailValue}>
+                  {`${profileData.heightCm} cm`}
+                </Text>
+              </View>
+            </View>
+          ) : null}
+
+          {/* Contact Information */}
+          {(profileData.email && profileData.email !== 'Not specified') ? (
+            <View style={styles.detailRow}>
+              <View style={styles.iconWrapper}>
+                <Icon 
+                  name="email" 
+                  size={20} 
+                  color={colors.secondary} 
+                />
+              </View>
+              <View style={styles.detailContent}>
+                <Text variant="bodySmall" style={styles.detailLabel}>Email</Text>
+                <Text variant="bodyMedium" style={styles.detailValue}>
+                  {String(profileData.email)}
+                </Text>
+              </View>
+            </View>
+          ) : null}
+
+          {(profileData.phone && profileData.phone !== 'Not specified' && profileData.phone !== null) ? (
+            <View style={styles.detailRow}>
+              <View style={styles.iconWrapper}>
+                <Icon 
+                  name="phone" 
+                  size={20} 
+                  color={colors.secondary} 
+                />
+              </View>
+              <View style={styles.detailContent}>
+                <Text variant="bodySmall" style={styles.detailLabel}>Phone</Text>
+                <Text variant="bodyMedium" style={styles.detailValue}>
+                  {String(profileData.phone)}
+                </Text>
+              </View>
+            </View>
+          ) : null}
         </View>
       </Surface>
       <View style={styles.ornateBottomBorder}>
@@ -354,7 +587,7 @@ const styles = StyleSheet.create({
   },
   header: {
     borderRadius: 0,
-    backgroundColor: colors.surfaceGold,
+    backgroundColor: colors.white,
     borderWidth: 4,
     borderColor: colors.secondary,
   },
@@ -482,7 +715,7 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     borderRadius: 0,
-    backgroundColor: colors.surfaceGold,
+    backgroundColor: colors.white,
     padding: 20,
     borderWidth: 4,
     borderColor: colors.secondary,
@@ -600,7 +833,21 @@ const styles = StyleSheet.create({
   emptySubtitle: {
     color: colors.text.secondary,
     textAlign: 'center',
-    lineHeight: 1.6 * 18,
+    lineHeight: 28,
+  },
+  bioSection: {
+    marginBottom: 20,
+    padding: 16,
+    backgroundColor: colors.gray[50],
+    borderRadius: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.secondary,
+  },
+  bioText: {
+    color: colors.text.primary,
+    lineHeight: 1.6 * 16,
+    fontSize: 15,
+    fontStyle: 'italic',
   },
 });
 

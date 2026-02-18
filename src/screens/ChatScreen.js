@@ -1,52 +1,78 @@
-import React, { useState } from 'react';
-import { View, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Surface, Text, Avatar, Chip } from 'react-native-paper';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, FlatList, StyleSheet, TouchableOpacity, RefreshControl } from 'react-native';
+import { Surface, Text, Avatar, Chip, ActivityIndicator } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors } from '../styles/theme';
+import { AuthContext } from '../context/AuthContext';
+import { userAPI } from '../services/api';
 
 export default function ChatScreen({ navigation }) {
-  // Chat list - list of conversations
-  const [chats] = useState([
-    { 
-      id: '1', 
-      name: 'Priya Sharma', 
-      lastMessage: 'Hi! Nice to connect.', 
-      time: '2m ago',
-      unread: 2,
-      photo: 'https://randomuser.me/api/portraits/women/1.jpg'
-    },
-    { 
-      id: '2', 
-      name: 'Rahul Kumar', 
-      lastMessage: 'Thank you for your interest!', 
-      time: '1h ago',
-      unread: 0,
-      photo: 'https://randomuser.me/api/portraits/men/2.jpg'
-    },
-    { 
-      id: '3', 
-      name: 'Anjali Patel', 
-      lastMessage: 'Looking forward to connecting!', 
-      time: '3h ago',
-      unread: 1,
-      photo: 'https://randomuser.me/api/portraits/women/3.jpg'
-    },
-    { 
-      id: '4', 
-      name: 'Vikram Singh', 
-      lastMessage: 'Hello! How are you?', 
-      time: '1d ago',
-      unread: 0,
-      photo: 'https://randomuser.me/api/portraits/men/4.jpg'
-    },
-    
-  ]);
+  const { user, likedProfileIds } = useContext(AuthContext);
+  const [chats, setChats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Fetch conversations from liked profiles
+  const fetchConversations = async () => {
+    if (!user?.id || likedProfileIds.length === 0) {
+      setChats([]);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setError(null);
+      const conversations = [];
+      
+      // For each liked profile, we'll need to get their details
+      // For now, we'll create conversation objects from liked profiles
+      // In a real app, you'd have a conversations endpoint that returns all conversations
+      for (const profileId of likedProfileIds) {
+        try {
+          const userResult = await userAPI.getUserById(profileId);
+          if (userResult.success && userResult.data) {
+            const otherUser = userResult.data;
+            conversations.push({
+              id: profileId,
+              conversationId: null, // Will be set when conversation is created
+              name: otherUser.name || otherUser.fullName || 'Unknown',
+              lastMessage: 'Start a conversation...',
+              time: '',
+              unread: 0,
+              photo: otherUser.photoUri || otherUser.imagePaths?.[0] || null,
+              otherUserId: otherUser.id,
+            });
+          }
+        } catch (err) {
+          console.log('Error fetching user:', err);
+        }
+      }
+      
+      setChats(conversations);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error fetching conversations:', err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchConversations();
+  }, [user?.id, likedProfileIds]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchConversations();
+  };
 
   const renderChatItem = ({ item }) => (
     <TouchableOpacity 
       onPress={() => {
-        // Navigate to individual chat - you can create a ChatDetailScreen later
-        console.log('Open chat with', item.name);
+        // Navigate to individual chat detail screen with selected chat
+        navigation.navigate('ChatDetail', { chat: item });
       }}
       activeOpacity={0.8}
     >
@@ -129,14 +155,31 @@ export default function ChatScreen({ navigation }) {
         </View>
       </Surface>
       
-      <FlatList
-        contentContainerStyle={styles.listContent}
-        data={chats}
-        keyExtractor={(item) => item.id}
-        renderItem={renderChatItem}
-        ListEmptyComponent={renderEmptyState}
-        showsVerticalScrollIndicator={false}
-      />
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text variant="bodyLarge" style={styles.loadingText}>
+            Loading conversations...
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          contentContainerStyle={styles.listContent}
+          data={chats}
+          keyExtractor={(item) => item.id}
+          renderItem={renderChatItem}
+          ListEmptyComponent={renderEmptyState}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[colors.primary]}
+              tintColor={colors.primary}
+            />
+          }
+        />
+      )}
     </View>
   );
 }
@@ -149,10 +192,10 @@ const styles = StyleSheet.create({
   header: {
     margin: 16,
     marginBottom: 12,
-    borderRadius: 16,
+    borderRadius: 0,
     backgroundColor: colors.surfaceGold,
-    borderWidth: 2,
-    borderColor: colors.secondary + '60',
+    borderWidth: 3,
+    borderColor: colors.secondary,
     padding: 18,
   },
   headerContent: {
@@ -191,10 +234,10 @@ const styles = StyleSheet.create({
   chatCard: {
     marginBottom: 10,
     marginHorizontal: 16,
-    borderRadius: 16,
+    borderRadius: 0,
     backgroundColor: colors.surfaceGold,
-    borderWidth: 1.5,
-    borderColor: colors.secondary + '40',
+    borderWidth: 2,
+    borderColor: colors.secondary,
   },
   chatContent: {
     flexDirection: 'row',
@@ -287,6 +330,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 1.6 * 16,
     fontSize: 15,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 48,
+  },
+  loadingText: {
+    marginTop: 16,
+    color: colors.text.secondary,
+    fontWeight: '500',
   },
 });
 
