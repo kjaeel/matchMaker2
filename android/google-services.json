@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1027780168702",
+    "project_id": "matchmaker-885f9",
+    "storage_bucket": "matchmaker-885f9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027780168702:android:df5deeff4eab13d8bb8eaf",
+        "android_client_info": {
+          "package_name": "com.matchmakingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeVO_WJRp6UTMJE7M760x8BCH623hewTY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Provider as PaperProvider, MD3LightTheme } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './src/navigation/AppNavigator';
 import { AuthProvider } from './src/context/AuthContext';
+import { setupForegroundMessageHandler } from './src/services/notifications';
 
 const theme = {
   ...MD3LightTheme,
@@ -16,6 +17,14 @@ const theme = {
 };
 
 export default function App() {
+  useEffect(() => {
+    // Set up foreground message handler
+    const unsubscribe = setupForegroundMessageHandler();
+
+    // Clean up on unmount
+    return unsubscribe;
+  }, []);
+
   return (
     <AuthProvider>
       <PaperProvider theme={theme}>

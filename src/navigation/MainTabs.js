@@ -6,7 +6,8 @@ import SearchScreen from '../screens/SearchScreen';
 import MatchesScreen from '../screens/MatchesScreen';
 import ChatScreen from '../screens/ChatScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
-import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { colors } from '../styles/theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,24 +16,28 @@ export default function MainTabs() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#FF6B6B',
-        tabBarInactiveTintColor: '#6C757D',
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.gray[600],
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopColor: '#DEE2E6',
-          borderTopWidth: 1,
+          backgroundColor: colors.surfaceGold,
+          borderTopColor: colors.secondary,
+          borderTopWidth: 4,
           paddingBottom: Platform.OS === 'ios' ? 20 : 8,
           paddingTop: 8,
           height: Platform.OS === 'ios' ? 88 : 64,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.2,
-          shadowRadius: 8,
-          elevation: 8,
+          shadowColor: colors.maroon,
+          shadowOffset: { width: 0, height: -6 },
+          shadowOpacity: 0.25,
+          shadowRadius: 16,
+          elevation: 16,
+          borderLeftWidth: 3,
+          borderLeftColor: colors.primary,
+          borderRightWidth: 3,
+          borderRightColor: colors.primary,
         },
         tabBarLabelStyle: {
           fontSize: 12,
-          fontWeight: '500',
+          fontWeight: '600',
           marginTop: 4,
         },
         tabBarIconStyle: {
@@ -45,7 +50,7 @@ export default function MainTabs() {
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons 
+            <Icon 
               name="home" 
               color={color} 
               size={size} 
@@ -59,8 +64,8 @@ export default function MainTabs() {
         component={SearchScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons 
-              name="search" 
+            <Icon 
+              name="magnify" 
               color={color} 
               size={size} 
             />
@@ -73,8 +78,8 @@ export default function MainTabs() {
         component={MatchesScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons 
-              name="favorite" 
+            <Icon 
+              name="heart" 
               color={color} 
               size={size} 
             />
@@ -87,7 +92,7 @@ export default function MainTabs() {
         component={ChatScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons 
+            <Icon 
               name="chat" 
               color={color} 
               size={size} 
@@ -101,8 +106,8 @@ export default function MainTabs() {
         component={UserProfileScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons 
-              name="person" 
+            <Icon 
+              name="account" 
               color={color} 
               size={size} 
             />
