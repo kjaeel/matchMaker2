@@ -293,4 +293,31 @@ export const messageAPI = {
   },
 };
 
+// Notification API Services
+export const notificationAPI = {
+  // Register FCM token
+  registerToken: async (userId, token) => {
+    try {
+      console.log('🔔 notificationAPI.registerToken called with:');
+      console.log('  - userId:', userId);
+      console.log('  - token:', token.substring(0, 20) + '...');
+      
+      const response = await apiClient.post('/notifications/register-token', {
+        userId: parseInt(userId),
+        token: token,
+      });
+      
+      console.log('✅ Token registered successfully');
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('❌ notificationAPI.registerToken error:');
+      console.error('  - Status:', error.response?.status);
+      console.error('  - Data:', JSON.stringify(error.response?.data, null, 2));
+      console.error('  - Message:', error.message);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to register token';
+      return { success: false, error: errorMessage };
+    }
+  },
+};
+
 export { baseURL };
