@@ -1,5 +1,13 @@
+import {getApp, getApps, initializeApp} from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
-import { notificationAPI } from './api';
+import {notificationAPI} from './api';
+
+
+// Use existing default Firebase app if one is already created, otherwise initialize.
+const app = getApps().length ? getApp() : initializeApp();
+
+// Ensure the app object is available for any direct Firebase calls.
+export default app;
 
 // Request permission for notifications
 export const requestNotificationPermission = async () => {

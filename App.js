@@ -25,6 +25,11 @@ export default function App() {
     return unsubscribe;
   }, []);
 
+  //   useEffect(() => {
+  //   console.log('Firebase ready:', firestore().app.name);
+  // }, []);
+
+
   return (
     <AuthProvider>
       <PaperProvider theme={theme}>
